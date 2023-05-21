@@ -10,3 +10,6 @@
 *.so
 lib/
 backup/
+
+# Project-specific files
+flycfg
