@@ -19,7 +19,6 @@ type
     LazSerial1: TLazSerial;
     LogClearButton: TButton;
     FixFeaturesList: TListBox;
-    Label20: TLabel;
     Label21: TLabel;
     Label23: TLabel;
     Label24: TLabel;
@@ -43,9 +42,6 @@ type
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     BeeperRcList: TListBox;
@@ -62,8 +58,6 @@ type
     SaveDialog: TSaveDialog;
     BeeperTab: TTabSheet;
     SerialTab: TTabSheet;
-    ModesTab: TTabSheet;
-    MotorsTab: TTabSheet;
     DebugTab: TTabSheet;
     LogTab: TTabSheet;
     UartWriteBtn: TButton;
@@ -104,7 +98,7 @@ type
     Serial: TBlockSerial;
     Config: TIniFile;
     procedure CurCfgShowLine(s: String);
-    procedure UartConnect();
+    function UartConnect(): Boolean;
     procedure GetRcByFeature(feature: String; RcList: TStrings);
   public
 
@@ -131,11 +125,15 @@ begin
   end;
 end;
 
-procedure TForm1.UartConnect();
+function TForm1.UartConnect(): Boolean;
 var
   s: String;
   attempt: Integer;
 begin
+  if UartCombo.Text = '' then begin
+    StatusLabel.Caption := 'No serial port selected!';
+    Exit(False);
+  end;
   s := '';
   StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Refresh;
   for attempt := 1 to 10 do begin
@@ -157,8 +155,9 @@ begin
   end;
   if s <> '#' then begin;
      StatusLabel.Caption := 'Failed to connect to ' + UartCombo.Text;
-     exit;
+     Exit(False);
   end;
+  Result := True;
 end;
 
 procedure TForm1.GetRcByFeature(feature: String; RcList: TStrings);
@@ -245,7 +244,7 @@ procedure TForm1.CfgListClick(Sender: TObject);
 var
   ListBox: TListBox absolute Sender;
 begin
-  if ListBox.ItemIndex < 0 then exit;
+  if ListBox.ItemIndex < 0 then Exit;
   CurCfgShowLine(ListBox.Items[ListBox.ItemIndex]);
 end;
 
@@ -254,8 +253,8 @@ var
   s: String;
   reason: String;
 begin
-  if not User then exit;
-  if BeeperList.ItemIndex < 0 then exit;
+  if not User then Exit;
+  if BeeperList.ItemIndex < 0 then Exit;
 
   // Show correpsonding line in current config
   reason := BeeperList.Items[BeeperList.ItemIndex];
@@ -296,7 +295,7 @@ end;
 
 procedure TForm1.CurCfgListDblClick(Sender: TObject);
 begin
-  if CurCfgList.ItemIndex < 0 then exit;
+  if CurCfgList.ItemIndex < 0 then Exit;
   CurCfgList.Items[CurCfgList.ItemIndex] := InputBox('Edit', 'Edit line', CurCfgList.Items[CurCfgList.ItemIndex]);
 end;
 
@@ -306,10 +305,10 @@ var
   fields: TStringArray;
   i: Integer;
 begin
-  if not User then exit;
-  if CurCfgList.ItemIndex < 0 then exit;
+  if not User then Exit;
+  if CurCfgList.ItemIndex < 0 then Exit;
   fields := CurCfgList.Items[CurCfgList.ItemIndex].Split(' ');
-  if Length(fields) < 2 then exit;
+  if Length(fields) < 2 then Exit;
 
   s := '';
   for i := 0 to AutoComleteList.Items.Count-2 do begin
@@ -352,11 +351,11 @@ var
   cmd: String;
 begin
   if CurCfgList.Items.Count = 0 then begin
-    exit;
     StatusLabel.Caption := 'Nothing to write!';
+    Exit;
   end;
 
-  UartConnect();
+  if not UartConnect() then Exit;
 
   StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Refresh;
   for i := 0 to CurCfgList.Items.Count-1 do begin
@@ -370,7 +369,7 @@ begin
     end;
     if s <> '# #' then begin;
        StatusLabel.Caption := 'Failed to write: ' + cmd;
-       exit;
+       Exit;
     end;
     ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
     ProgressBar.Refresh;
@@ -419,8 +418,8 @@ var
   s: String;
   feature: String;
 begin
-  if not User then exit;
-  if FeaturesList.ItemIndex < 0 then exit;
+  if not User then Exit;
+  if FeaturesList.ItemIndex < 0 then Exit;
 
   // Show correpsonding line in current config
   feature := FeaturesList.Items[FeaturesList.ItemIndex];
@@ -551,7 +550,7 @@ var
 begin
   if CurCfgList.Items.Count < 1 then begin
     StatusLabel.Caption := 'Nothing to save!';
-    exit;
+    Exit;
   end;
 
   // Try to guess a file name
@@ -583,14 +582,14 @@ procedure TForm1.FindButtonClick(Sender: TObject);
 var
   i: Integer;
 begin
-  if CurCfgList.Items.Count < 2 then exit;
+  if CurCfgList.Items.Count < 2 then Exit;
   if CurCfgList.ItemIndex < 0 then CurCfgList.ItemIndex := 0;
   i := CurCfgList.ItemIndex + 1;
   while i <> CurCfgList.ItemIndex do begin
     if Pos(FindBox.Text, CurCfgList.Items[i]) > 0 then begin
       CurCfgList.ItemIndex := i;
       if FindBox.Items.IndexOf(FindBox.Text) = -1 then FindBox.Items.Add(FindBox.Text);
-      exit;
+      Exit;
     end;
     i := i + 1;
     if i >= CurCfgList.Items.Count then i := 0;
@@ -601,8 +600,8 @@ procedure TForm1.FixFeaturesListSelectionChange(Sender: TObject; User: boolean);
 var
   feature: String;
 begin
-  if not User then exit;
-  if FixFeaturesList.ItemIndex < 0 then exit;
+  if not User then Exit;
+  if FixFeaturesList.ItemIndex < 0 then Exit;
 
   feature := FixFeaturesList.Items[FixFeaturesList.ItemIndex];
   FeaturesList.Hint := Config.ReadString('feature_hints', FixFeaturesList.Items[FixFeaturesList.ItemIndex], '');
@@ -633,7 +632,7 @@ begin
   if MessageDlg ('Confirm', 'Reset the FC config to default and load it?', mtConfirmation,
      [mbYes, mbNo],0) = mrYes
   then begin
-    UartConnect();
+    if not UartConnect() then Exit;
 
     StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Refresh;
     Serial.SendString('defaults' + #10);
@@ -657,8 +656,8 @@ var
   portFunction: String;
   portFnId: Integer;
 begin
-  if not User then exit;
-  if SerialList.ItemIndex < 0 then exit;
+  if not User then Exit;
+  if SerialList.ItemIndex < 0 then Exit;
 
   port := StrToInt(SerialList.Items[SerialList.ItemIndex]);
 
@@ -728,6 +727,17 @@ var
 begin
   s := GetSerialPortNames;
   ports := s.Split(', ');
+
+  // Linux-only: drop empty entries
+  s := '';
+  for index := 0 to Length(ports)-1 do begin
+    if Length(ports[index]) > 3 then begin
+      if s <> '' then s := s + ', ';
+      s := s + ports[index];
+    end;
+  end;
+  ports := s.Split(', ');
+
   for index := 0 to Length(ports)-1 do begin
     if UartCombo.Items.Count <> Length(ports) then begin
       UartCombo.Items.Clear;
@@ -748,7 +758,7 @@ procedure TForm1.UartReadBtnClick(Sender: TObject);
 var
   s: String;
 begin
-  UartConnect();
+  if not UartConnect() then Exit;
 
   StatusLabel.Caption := 'Reading config diff'; StatusLabel.Refresh;
   Serial.SendString('diff' + #10);
@@ -761,7 +771,7 @@ begin
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read diff config from FC on ' + UartCombo.Text;
-     exit;
+     Exit;
   end;
 
   StatusLabel.Caption := 'Reading config dump'; StatusLabel.Refresh;
@@ -775,7 +785,7 @@ begin
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read config dump from FC on ' + UartCombo.Text;
-     exit;
+     Exit;
   end;
 
   StatusLabel.Caption := 'Reading active resources'; StatusLabel.Refresh;
@@ -789,7 +799,7 @@ begin
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read active resources from FC on ' + UartCombo.Text;
-     exit;
+     Exit;
   end;
 
   StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Refresh;
@@ -803,7 +813,7 @@ begin
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read autocomplete data from FC on ' + UartCombo.Text;
-     exit;
+     Exit;
   end;
 
   Serial.CloseSocket;
