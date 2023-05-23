@@ -379,7 +379,7 @@ begin
   StatusLabel.Caption := 'Saving FC config'; StatusLabel.Refresh;
   Serial.SendString('save' + #10);
   Serial.CloseSocket; // This commands resets the FC, there is no response
-  Sleep(1000);
+  Sleep(1500);
 
   ActCfgList.Items := CurCfgList.Items;
   UartReadBtnClick(Sender); // Re-read configuration after a save
@@ -439,56 +439,71 @@ var
   s: String;
   fields: TStringArray;
   ignores: TStringArray;
+  customColor: TColor;
 begin
-  ListBox.Canvas.FillRect(ARect);
 
-  if not ListBox.Selected[Index] then begin
-    ListBox.Canvas.Font.Color := clBlack;
-    s := ListBox.Items[Index];
-    fields := s.Split(' ');
+  customColor := clBlack;
+  s := ListBox.Items[Index];
+  fields := s.Split(' ');
 
-    // Lowest priority: disabled features/settings are gray
-    if fields[0] = 'feature' then begin
-      if fields[1][1] = '-' then begin
-        ListBox.Canvas.Font.Color := clGray;
-      end;
+  // Lowest priority: disabled features/settings are gray
+  if fields[0] = 'feature' then begin
+    if fields[1][1] = '-' then begin
+      customColor := clGray;
     end;
-    if fields[0] = 'set' then begin
-      if fields[3] = 'OFF' then begin
-        ListBox.Canvas.Font.Color := clGray;
-      end;
+  end;
+  if fields[0] = 'set' then begin
+    if fields[3] = 'OFF' then begin
+      customColor := clGray;
     end;
+  end;
 
-    // Inactive resources are red, free/unassigned resources are gray
-    if (fields[0] = 'resource') or (fields[0] = 'dma') then begin
-      if fields[3] = 'NONE' then begin
-        ListBox.Canvas.Font.Color := clGray;
-      end else if ActiveRcList.Items.Count > 0 then begin
-        if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1] + ' ' + fields[2]) < 0 then begin
-          if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1]) < 0 then begin
-            if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then ListBox.Canvas.Font.Color := clRed
-            else ListBox.Canvas.Font.Color := clGray;
-          end;
+  // Inactive resources are red, free/unassigned resources are gray
+  if fields[0] = 'resource' then begin
+    if fields[3] = 'NONE' then begin
+      customColor := clGray;
+    end else if ActiveRcList.Items.Count > 0 then begin
+      if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1] + ' ' + fields[2]) < 0 then begin
+        if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1]) < 0 then begin
+          if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then customColor := clRed
+          else customColor := clGray;
         end;
       end;
     end;
+  end;
 
-    // Differences to default config are green, keep red lines unchanged
-    if DiffCfgList.Items.IndexOf(s) >= 0 then begin
-      if ListBox.Canvas.Font.Color <> clRed then ListBox.Canvas.Font.Color := clGreen;
-    end;
-
-    // Unsaved changes are blue, keep red lines unchanged
-    if ActCfgList.Items.IndexOf(s) < 0 then begin
-      if ListBox.Canvas.Font.Color <> clRed then ListBox.Canvas.Font.Color := clBlue;
-    end;
-
-    // Commments and batch start/end commands are gray
-    ignores := Config.ReadString('general', 'CFG_IGNORE_LINES', '#').Split(',');
-    for s in ignores do begin
-      if fields[0] = s then ListBox.Canvas.Font.Color := clGray;
+  // Unassigned dma channels are gray
+  if fields[0] = 'dma' then begin
+    if fields[3] = 'NONE' then begin
+      customColor := clGray;
     end;
   end;
+
+  // Differences to default config are green, keep red lines unchanged
+  if s = '' then begin
+    customColor := clGray;
+  end else if DiffCfgList.Items.IndexOf(s) >= 0 then begin
+    if customColor <> clRed then customColor := clGreen;
+  end;
+
+  // Unsaved changes are blue, keep red lines unchanged
+  if ActCfgList.Items.IndexOf(s) < 0 then begin
+    if customColor <> clRed then customColor := clBlue;
+  end;
+
+  // Commments and batch start/end commands are gray
+  ignores := Config.ReadString('general', 'CFG_IGNORE_LINES', '#').Split(',');
+  for s in ignores do begin
+    if fields[0] = s then customColor := clGray;
+  end;
+
+  if ListBox.Selected[Index] then begin
+    ListBox.Canvas.Brush.Color := customColor;
+  end else begin
+    ListBox.Canvas.Font.Color := customColor;
+  end;
+
+  ListBox.Canvas.FillRect(ARect);
   ListBox.Canvas.TextRect(ARect, ARect.Left+2, ARect.Top, ListBox.Items[Index]);
 end;
 
@@ -637,7 +652,7 @@ begin
     StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Refresh;
     Serial.SendString('defaults' + #10);
     Serial.CloseSocket; // This commands resets the FC, there is no response
-    Sleep(1000);
+    Sleep(1500);
 
     UartReadBtnClick(Sender); // Re-read configuration after a reset
   end;
@@ -651,6 +666,7 @@ end;
 procedure TForm1.SerialListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
+  i: Integer;
   fields: TStringArray;
   port: Integer;
   portFunction: String;
@@ -662,7 +678,8 @@ begin
   port := StrToInt(SerialList.Items[SerialList.ItemIndex]);
 
   SerialRcList.Items.Clear;
-  for s in CurCfgList.Items do begin
+  for i := CurCfgList.Items.Count-1 downto 0 do begin
+    s := CurCfgList.Items[i];
     fields := s.Split(' ');
     if fields[0] = 'resource' then begin
       if Pos('SERIAL', fields[1]) = 1 then begin
@@ -673,6 +690,7 @@ begin
     end;
     if fields[0] = 'serial' then begin
       if StrToInt(fields[1]) = port-1 then begin
+        CurCfgList.ItemIndex := i;
         portFnId := StrToInt(fields[2]);
         if portFnId > 2 then portFnId := Trunc(Log2(portFnId+1))+1;
         SerialFnBox.ItemIndex := portFnId;
