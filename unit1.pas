@@ -744,17 +744,7 @@ var
   index: Integer;
 begin
   s := GetSerialPortNames;
-  ports := s.Split(', ');
-
-  // Linux-only: drop empty entries
-  s := '';
-  for index := 0 to Length(ports)-1 do begin
-    if Length(ports[index]) > 3 then begin
-      if s <> '' then s := s + ', ';
-      s := s + ports[index];
-    end;
-  end;
-  ports := s.Split(', ');
+  ports := s.Split(', ', TStringSplitOptions.ExcludeEmpty);
 
   for index := 0 to Length(ports)-1 do begin
     if UartCombo.Items.Count <> Length(ports) then begin
