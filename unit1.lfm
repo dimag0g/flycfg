@@ -2,12 +2,12 @@ object Form1: TForm1
   Left = 387
   Height = 457
   Top = 162
-  Width = 793
+  Width = 790
   Anchors = []
   BorderWidth = 8
   Caption = 'FlyCfg'
   ClientHeight = 457
-  ClientWidth = 793
+  ClientWidth = 790
   Constraints.MinHeight = 457
   Constraints.MinWidth = 790
   Icon.Data = {
@@ -810,17 +810,18 @@ object Form1: TForm1
   }
   OnClose = FormClose
   OnCreate = FormCreate
+  OnResize = FormResize
   ShowHint = True
   LCLVersion = '2.0.12.0'
   object DetailsTab: TPageControl
-    Left = 8
+    Left = 360
     Height = 409
     Top = 7
     Width = 424
-    ActivePage = SerialTab
+    ActivePage = FeaturesTab
     Anchors = [akTop, akLeft, akBottom]
     MultiLine = True
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     Options = [nboMultiLine]
     object FeaturesTab: TTabSheet
@@ -1088,229 +1089,243 @@ object Form1: TForm1
       end
     end
   end
-  object Label6: TLabel
-    Left = 440
-    Height = 15
-    Top = 92
-    Width = 80
-    Caption = 'Current config:'
-    ParentColor = False
-  end
-  object CurCfgList: TListBox
-    Left = 440
-    Height = 280
-    Top = 120
-    Width = 344
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    ItemHeight = 0
-    OnClick = CurCfgListClick
-    OnDblClick = CurCfgListDblClick
-    OnDrawItem = CfgListDrawItem
-    OnSelectionChange = CurCfgListSelectionChange
-    Style = lbOwnerDrawFixed
-    TabOrder = 1
-  end
-  object FileNameEdit: TLabeledEdit
-    Left = 504
-    Height = 23
-    Top = 48
-    Width = 168
-    Anchors = [akTop, akLeft, akRight]
-    EditLabel.Height = 15
-    EditLabel.Width = 58
-    EditLabel.Caption = 'Config file:'
-    EditLabel.ParentColor = False
-    LabelPosition = lpLeft
-    ParentBidiMode = False
-    TabOrder = 2
-  end
-  object FileReadBtn: TButton
-    Left = 680
-    Height = 25
-    Hint = 'Load the current configuration from a file'
-    Top = 48
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Read'
-    OnClick = FileReadBtnClick
-    TabOrder = 3
-  end
-  object FileWriteBtn: TButton
-    Left = 736
-    Height = 25
-    Hint = 'Write the current configuration to a file'
-    Top = 48
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Write'
-    OnClick = FileWriteBtnClick
-    TabOrder = 4
-  end
-  object FindBox: TComboBox
-    Left = 552
-    Height = 23
-    Top = 88
-    Width = 161
-    Anchors = [akTop, akLeft, akRight]
-    ItemHeight = 15
-    OnEditingDone = FindButtonClick
-    TabOrder = 5
-    Text = '<search>'
-  end
-  object FindButton: TButton
-    Left = 736
-    Height = 24
-    Top = 88
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Find'
-    OnClick = FindButtonClick
-    TabOrder = 6
-  end
-  object Label12: TLabel
-    Left = 440
-    Height = 15
-    Top = 408
-    Width = 42
-    Anchors = [akLeft, akBottom]
-    Caption = 'Legend:'
-    Font.Style = [fsUnderline]
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label13: TLabel
-    Left = 731
-    Height = 15
-    Top = 408
-    Width = 38
-    Anchors = [akLeft, akBottom]
-    Caption = 'Default'
-    ParentColor = False
-  end
-  object Label14: TLabel
-    Left = 674
-    Height = 15
-    Top = 408
-    Width = 41
-    Anchors = [akLeft, akBottom]
-    Caption = 'Inactive'
-    Font.Color = clGray
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label15: TLabel
-    Left = 616
-    Height = 15
-    Top = 408
-    Width = 42
-    Anchors = [akLeft, akBottom]
-    Caption = 'Custom'
-    Font.Color = clGreen
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label16: TLabel
-    Left = 496
-    Height = 15
-    Top = 408
-    Width = 42
-    Anchors = [akLeft, akBottom]
-    Caption = 'Conflict'
-    Font.Color = clRed
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label7: TLabel
-    Left = 440
-    Height = 15
-    Top = 12
-    Width = 42
-    Caption = 'FC Port:'
-    ParentColor = False
-  end
-  object UartCombo: TComboBox
-    Left = 496
-    Height = 23
-    Top = 8
-    Width = 120
-    Anchors = [akTop, akLeft, akRight]
-    ItemHeight = 15
-    OnClick = UartComboClick
-    TabOrder = 7
-    Text = 'UartCombo'
-  end
-  object UartReadBtn: TButton
-    Left = 624
-    Height = 25
-    Hint = 'Read the active configuration from the FC'
-    Top = 8
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Load'
-    OnClick = UartReadBtnClick
-    TabOrder = 8
-  end
-  object UartWriteBtn: TButton
-    Left = 680
-    Height = 25
-    Hint = 'Write the current configuration to the FC'
-    Top = 8
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Save'
-    OnClick = UartWriteBtnClick
-    TabOrder = 9
-  end
-  object LoadDefaultBtn: TButton
-    Left = 736
-    Height = 25
-    Hint = 'Reset the FC configration to defaults and read it'
-    Top = 8
-    Width = 48
-    Anchors = [akTop, akRight]
-    Caption = 'Reset'
-    OnClick = LoadDefaultBtnClick
-    TabOrder = 10
-  end
-  object Label21: TLabel
-    Left = 552
-    Height = 15
-    Top = 408
-    Width = 45
-    Anchors = [akLeft, akBottom]
-    Caption = 'Unsaved'
-    Font.Color = clBlue
-    ParentColor = False
-    ParentFont = False
-  end
   object ProgressBar: TProgressBar
     Left = 8
     Height = 23
     Top = 425
     Width = 216
     Anchors = [akLeft, akBottom]
-    TabOrder = 11
+    TabOrder = 1
   end
   object StatusLabel: TLabel
     Left = 232
     Height = 23
     Top = 425
-    Width = 552
+    Width = 549
     Anchors = [akLeft, akRight, akBottom]
     AutoSize = False
     Caption = 'Ready'
     ParentColor = False
   end
+  object CurCfgGroup: TGroupBox
+    Left = 4
+    Height = 415
+    Top = 1
+    Width = 352
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'Current config'
+    ClientHeight = 395
+    ClientWidth = 348
+    TabOrder = 2
+    object Label7: TLabel
+      Left = 0
+      Height = 15
+      Top = 12
+      Width = 42
+      Caption = 'FC Port:'
+      ParentColor = False
+    end
+    object UartCombo: TComboBox
+      Left = 56
+      Height = 23
+      Top = 8
+      Width = 112
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 15
+      OnClick = UartComboClick
+      TabOrder = 0
+      Text = 'UartCombo'
+    end
+    object UartReadBtn: TButton
+      Left = 184
+      Height = 25
+      Hint = 'Read the active configuration from the FC'
+      Top = 8
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Load'
+      OnClick = UartReadBtnClick
+      TabOrder = 1
+    end
+    object UartWriteBtn: TButton
+      Left = 240
+      Height = 25
+      Hint = 'Write the current configuration to the FC'
+      Top = 8
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Save'
+      OnClick = UartWriteBtnClick
+      TabOrder = 2
+    end
+    object LoadDefaultBtn: TButton
+      Left = 296
+      Height = 25
+      Hint = 'Reset the FC configration to defaults and read it'
+      Top = 8
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Reset'
+      OnClick = LoadDefaultBtnClick
+      TabOrder = 3
+    end
+    object FileReadBtn: TButton
+      Left = 240
+      Height = 25
+      Hint = 'Load the current configuration from a file'
+      Top = 48
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Read'
+      OnClick = FileReadBtnClick
+      TabOrder = 4
+    end
+    object FileWriteBtn: TButton
+      Left = 296
+      Height = 25
+      Hint = 'Write the current configuration to a file'
+      Top = 48
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Write'
+      OnClick = FileWriteBtnClick
+      TabOrder = 5
+    end
+    object Label6: TLabel
+      Left = 0
+      Height = 15
+      Top = 98
+      Width = 80
+      Caption = 'Current config:'
+      ParentColor = False
+    end
+    object FindBox: TComboBox
+      Left = 144
+      Height = 23
+      Top = 88
+      Width = 137
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 15
+      OnEditingDone = FindButtonClick
+      TabOrder = 6
+      Text = '<search>'
+    end
+    object FindButton: TButton
+      Left = 296
+      Height = 24
+      Top = 88
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Find'
+      OnClick = FindButtonClick
+      TabOrder = 7
+    end
+    object CurCfgList: TListBox
+      Left = 0
+      Height = 249
+      Top = 120
+      Width = 344
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      ItemHeight = 0
+      OnClick = CurCfgListClick
+      OnDblClick = CurCfgListDblClick
+      OnDrawItem = CfgListDrawItem
+      OnSelectionChange = CurCfgListSelectionChange
+      Style = lbOwnerDrawFixed
+      TabOrder = 8
+    end
+    object Label12: TLabel
+      Left = 0
+      Height = 15
+      Top = 374
+      Width = 42
+      Anchors = [akLeft, akBottom]
+      Caption = 'Legend:'
+      Font.Style = [fsUnderline]
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label16: TLabel
+      Left = 56
+      Height = 15
+      Top = 374
+      Width = 42
+      Anchors = [akLeft, akBottom]
+      Caption = 'Conflict'
+      Font.Color = clRed
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label21: TLabel
+      Left = 110
+      Height = 15
+      Top = 374
+      Width = 45
+      Anchors = [akLeft, akBottom]
+      Caption = 'Unsaved'
+      Font.Color = clBlue
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label15: TLabel
+      Left = 170
+      Height = 15
+      Top = 374
+      Width = 42
+      Anchors = [akLeft, akBottom]
+      Caption = 'Custom'
+      Font.Color = clGreen
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label14: TLabel
+      Left = 226
+      Height = 15
+      Top = 374
+      Width = 41
+      Anchors = [akLeft, akBottom]
+      Caption = 'Inactive'
+      Font.Color = clGray
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label13: TLabel
+      Left = 282
+      Height = 15
+      Top = 374
+      Width = 38
+      Anchors = [akLeft, akBottom]
+      Caption = 'Default'
+      ParentColor = False
+    end
+    object FileNameEdit: TEdit
+      Left = 72
+      Height = 23
+      Top = 48
+      Width = 152
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 9
+    end
+    object Label3: TLabel
+      Left = 0
+      Height = 15
+      Top = 50
+      Width = 58
+      Caption = 'Config file:'
+      ParentColor = False
+    end
+  end
   object OpenDialog: TOpenDialog
     Filter = 'Config files|*.cfg|All files|*.*'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    Left = 520
-    Top = 144
+    Left = 40
+    Top = 168
   end
   object SaveDialog: TSaveDialog
     Filter = 'Config files|*.cfg|All files|*.*'
     Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
-    Left = 632
-    Top = 144
+    Left = 120
+    Top = 168
   end
 end

@@ -16,6 +16,9 @@ type
     AutoComleteList: TListBox;
     BeeperList: TCheckListBox;
     ActCfgList: TListBox;
+    CurCfgGroup: TGroupBox;
+    FileNameEdit: TEdit;
+    Label3: TLabel;
     LazSerial1: TLazSerial;
     LogClearButton: TButton;
     FixFeaturesList: TListBox;
@@ -34,7 +37,6 @@ type
     FindButton: TButton;
     FindBox: TComboBox;
     CurCfgList: TListBox;
-    FileNameEdit: TLabeledEdit;
     FileReadBtn: TButton;
     FileWriteBtn: TButton;
     Label12: TLabel;
@@ -86,6 +88,7 @@ type
     procedure FixFeaturesListSelectionChange(Sender: TObject; User: boolean);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure LoadDefaultBtnClick(Sender: TObject);
     procedure LogClearButtonClick(Sender: TObject);
     procedure SerialListSelectionChange(Sender: TObject; User: boolean);
@@ -97,6 +100,13 @@ type
   private
     Serial: TBlockSerial;
     Config: TIniFile;
+
+    // Proportional resize variables
+    FormWidth: Integer;
+    GroupWidth: Integer;
+    TabWidth: Integer;
+    TabLeft: Integer;
+
     procedure CurCfgShowLine(s: String);
     function UartConnect(): Boolean;
     procedure GetRcByFeature(feature: String; RcList: TStrings);
@@ -372,7 +382,7 @@ begin
        Exit;
     end;
     ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
-    ProgressBar.Refresh;
+    ProgressBar.Repaint;
   end;
   ProgressBar.Position := 0;
 
@@ -632,6 +642,11 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  FormWidth := Width;
+  TabWidth := DetailsTab.Width;
+  TabLeft := DetailsTab.Left;
+  GroupWidth := CurCfgGroup.Width;
+
   UartCombo.OnClick(Sender);
   Serial := TBlockSerial.Create;
   Config := TIniFile.Create('flycfg.ini');
@@ -640,6 +655,17 @@ begin
   DebugTab.TabVisible := True;
   LogTab.TabVisible := True;
   {$ENDIF}
+end;
+
+procedure TForm1.FormResize(Sender: TObject);
+var
+  ExtraWidth: Integer;
+begin
+  ExtraWidth := (Width - FormWidth) Div 2;
+
+  DetailsTab.Width := TabWidth + ExtraWidth;
+  DetailsTab.Left := TabLeft + ExtraWidth;
+  CurCfgGroup.Width := GroupWidth + ExtraWidth;
 end;
 
 procedure TForm1.LoadDefaultBtnClick(Sender: TObject);
