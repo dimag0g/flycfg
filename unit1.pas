@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, CheckLst, IniFiles, lazsynaser, LazSerial, Types, Math; // Grids
+  ExtCtrls, CheckLst, Menus, EditBtn, IniFiles, lazsynaser, LazSerial, Types,
+  Math, LCLType; // Grids
 
 type
 
@@ -107,12 +108,29 @@ type
     TabWidth: Integer;
     TabLeft: Integer;
 
+    // Config line statuses
+    CfgLineSts: array of Integer;
+
     procedure CurCfgShowLine(s: String);
+    function CfgCalcSts(index: Integer): Integer;
     function UartConnect(): Boolean;
     procedure GetRcByFeature(feature: String; RcList: TStrings);
   public
 
   end;
+
+const
+  CFG_LINE_INACTIVE = $0001; // OFF, NONE, etc.
+  CFG_LINE_COMMENT  = $0002; // Comments and info lines
+  CFG_MASK_GRAY     = $000F;
+  CFG_LINE_IN_DIFF  = $0010;
+  CFG_MASK_GREEN    = $00F0;
+  CFG_LINE_UNSAVED  = $0100;
+  CFG_MASK_BLUE     = $0F00;
+  CFG_LINE_NO_ALLOC = $1000; // Resource not allocated
+  CFG_LINE_NO_NAME  = $2000; // Invalid setting name
+  CFG_LINE_INVALID  = $2000; // Invalid value
+  CFG_MASK_RED      = $F000;
 
 var
   Form1: TForm1;
@@ -123,6 +141,44 @@ implementation
 
 { TForm1 }
 
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+{$PUSH}{$WARN 5024 OFF}
+begin
+  Config.Destroy;
+  Serial.Destroy;
+end;
+{$POP}
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  FormWidth := Width;
+  TabWidth := DetailsTab.Width;
+  TabLeft := DetailsTab.Left;
+  GroupWidth := CurCfgGroup.Width;
+
+  setLength(CfgLineSts, 10000);
+
+  UartCombo.OnClick(Sender);
+  Serial := TBlockSerial.Create;
+  Config := TIniFile.Create(ExtractFilePath(Application.ExeName) + DirectorySeparator + 'flycfg.ini');
+  DetailsTab.ActivePage := FeaturesTab;
+  {$IFOPT D+}
+  DebugTab.TabVisible := True;
+  LogTab.TabVisible := True;
+  {$ENDIF}
+end;
+
+procedure TForm1.FormResize(Sender: TObject);
+var
+  ExtraWidth: Integer;
+begin
+  ExtraWidth := (Width - FormWidth) Div 2;
+
+  DetailsTab.Width := TabWidth + ExtraWidth;
+  DetailsTab.Left := TabLeft + ExtraWidth;
+  CurCfgGroup.Width := GroupWidth + ExtraWidth;
+end;
+
 procedure TForm1.CurCfgShowLine(s: String);
 var
   i: Integer;
@@ -131,6 +187,74 @@ begin
     if CurCfgList.Items[i] = s then begin
        CurCfgList.ItemIndex := i;
        break;
+    end;
+  end;
+end;
+
+function TForm1.CfgCalcSts(index: Integer): Integer;
+var
+  s: String;
+  fields: TStringArray;
+  autoFields: TStringArray;
+  ignores: TStringArray;
+  i: Integer;
+begin
+  Result := 0;
+  s := CurCfgList.Items[index];
+  if s = '' then begin
+    Result := CFG_LINE_COMMENT;
+  end else begin
+    if DiffCfgList.Items.IndexOf(s) >= 0 then Result := Result or CFG_LINE_IN_DIFF;
+    if (ActCfgList.Items.Count <= index) or (ActCfgList.Items[index] <> s) then begin
+      if ActCfgList.Items.IndexOf(s) < 0 then Result := Result or CFG_LINE_UNSAVED;
+    end;
+
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty); // s is recycled at this point
+    ignores := Config.ReadString('general', 'CFG_IGNORE_LINES', '#').Split(',');
+    for s in ignores do begin
+      if fields[0] = s then Result := CFG_LINE_COMMENT;
+    end;
+
+    if fields[0] = 'feature' then begin
+      if fields[1][1] = '-' then Result := Result or CFG_LINE_INACTIVE;
+    end else if fields[0] = 'set' then begin
+      if fields[3] = 'OFF' then Result := Result or CFG_LINE_INACTIVE;
+      if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE;
+
+      i := 0;
+      for i := 0 to AutoComleteList.Items.Count-2 do begin
+        if Pos(fields[1] + ' = ', AutoComleteList.Items[i]) = 1 then begin
+           s := AutoComleteList.Items[i+1];
+           autoFields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+           if autoFields[0] <> 'Allowed' then begin
+             s := AutoComleteList.Items[i+2];
+             autoFields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+             if autoFields[0] <> 'Allowed' then break;
+           end;
+           if autoFields[1] = 'range:' then begin
+             if StrToFloat(fields[3]) < StrToFloat(autoFields[2]) then Result := Result or CFG_LINE_INVALID;
+             if StrToFloat(fields[3]) > StrToFloat(autoFields[4]) then Result := Result or CFG_LINE_INVALID;
+           end;
+          if autoFields[1] = 'values:' then begin
+            if Pos(fields[3], s) = 0 then Result := Result or CFG_LINE_INVALID;
+          end;
+           break;
+        end;
+      end;
+      if i = AutoComleteList.Items.Count-2 then Result := Result or CFG_LINE_NO_NAME;
+
+    end else if fields[0] = 'dma' then begin
+      if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE;
+    end else if fields[0] = 'resource' then begin
+      if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE
+      else if ActiveRcList.Items.Count > 0 then begin
+        if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1] + ' ' + fields[2]) < 0 then begin
+          if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1]) < 0 then begin
+            if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then Result := Result or CFG_LINE_NO_ALLOC
+            else Result := Result or CFG_LINE_INACTIVE;
+          end;
+        end;
+      end;
     end;
   end;
 end;
@@ -185,7 +309,7 @@ begin
   featureSetPrefix := Config.ReadString('feature_settings', feature, LowerCase(feature)) + '_';
   RcList.Clear;
   for s in CurCfgList.Items do begin
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if (fields[0] = 'resource') or (fields[0] = 'dma') then begin
       if Pos(featureRcPrefix, fields[1]) = 1 then begin
          RcList.Add(s);
@@ -215,7 +339,7 @@ begin
   BeeperRcList.Items.Clear;
   BeeperRcList.Items.Clear;
   for s in CurCfgList.Items do begin
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'beeper' then begin
         feature := fields[1];
 
@@ -289,7 +413,7 @@ var
 begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'beeper' then begin
       reason := fields[1];
       reasonActive := False;
@@ -311,6 +435,7 @@ procedure TForm1.CurCfgListDblClick(Sender: TObject);
 begin
   if CurCfgList.ItemIndex < 0 then Exit;
   CurCfgList.Items[CurCfgList.ItemIndex] := InputBox('Edit', 'Edit line', CurCfgList.Items[CurCfgList.ItemIndex]);
+  CfgLineSts[CurCfgList.ItemIndex] := CfgCalcSts(CurCfgList.ItemIndex);
 end;
 
 procedure TForm1.CurCfgListSelectionChange(Sender: TObject; User: boolean);
@@ -321,14 +446,14 @@ var
 begin
   if not User then Exit;
   if CurCfgList.ItemIndex < 0 then Exit;
-  fields := CurCfgList.Items[CurCfgList.ItemIndex].Split(' ');
+  fields := CurCfgList.Items[CurCfgList.ItemIndex].Split(' ', TStringSplitOptions.ExcludeEmpty);
   if Length(fields) < 2 then Exit;
 
   s := '';
   for i := 0 to AutoComleteList.Items.Count-2 do begin
     if Pos(fields[1], AutoComleteList.Items[i]) = 1 then begin
        s := AutoComleteList.Items[i+1];
-       fields := s.Split(' ');
+       fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
        if fields[0] <> 'Allowed' then s := AutoComleteList.Items[i+2];
        break;
     end;
@@ -355,6 +480,7 @@ begin
   cfgIndex := CurCfgList.Items.IndexOf(s);
   s := InputBox('Edit', 'Edit value:', s);
   CurCfgList.Items[cfgIndex] := s;
+  CfgLineSts[cfgIndex] := CfgCalcSts(cfgIndex);
   ListBox.Items[localIndex] := s;
 end;
 
@@ -388,6 +514,7 @@ begin
        LogList.Items.Add('wr recv: ' + s);
        LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
        {$ENDIF}
+       ProgressBar.Position := 0;
        Serial.CloseSocket;
        Exit;
     end;
@@ -415,7 +542,7 @@ var
 begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'feature' then begin
       feature := fields[1];
       featureActive := False;
@@ -456,68 +583,21 @@ procedure TForm1.CfgListDrawItem(Control: TWinControl; Index: Integer;
   ARect: TRect; State: TOwnerDrawState);
 var
   ListBox: TListBox absolute Control;
-  s: String;
-  fields: TStringArray;
-  ignores: TStringArray;
   customColor: TColor;
+  i: Integer;
 begin
 
   customColor := clBlack;
-  s := ListBox.Items[Index];
-  fields := s.Split(' ');
 
-  // Lowest priority: disabled features/settings are gray
-  if fields[0] = 'feature' then begin
-    if fields[1][1] = '-' then begin
-      customColor := clGray;
-    end;
-  end;
-  if fields[0] = 'set' then begin
-    if fields[3] = 'OFF' then begin
-      customColor := clGray;
-    end;
+  i := CurCfgList.Items.IndexOf(ListBox.Items[Index]);
+  if(i >= 0) then begin
+    if (CfgLineSts[i] and CFG_MASK_GRAY) <> 0 then customColor := clGray;
+    if (CfgLineSts[i] and CFG_MASK_GREEN) <> 0 then customColor := clGreen;
+    if (CfgLineSts[i] and CFG_MASK_BLUE) <> 0 then customColor := clBlue;
+    if (CfgLineSts[i] and CFG_MASK_RED) <> 0 then customColor := clRed;
   end;
 
-  // Inactive resources are red, free/unassigned resources are gray
-  if fields[0] = 'resource' then begin
-    if fields[3] = 'NONE' then begin
-      customColor := clGray;
-    end else if ActiveRcList.Items.Count > 0 then begin
-      if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1] + ' ' + fields[2]) < 0 then begin
-        if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1]) < 0 then begin
-          if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then customColor := clRed
-          else customColor := clGray;
-        end;
-      end;
-    end;
-  end;
-
-  // Unassigned dma channels are gray
-  if fields[0] = 'dma' then begin
-    if fields[3] = 'NONE' then begin
-      customColor := clGray;
-    end;
-  end;
-
-  // Differences to default config are green, keep red lines unchanged
-  if s = '' then begin
-    customColor := clGray;
-  end else if DiffCfgList.Items.IndexOf(s) >= 0 then begin
-    if customColor <> clRed then customColor := clGreen;
-  end;
-
-  // Unsaved changes are blue, keep red lines unchanged
-  if ActCfgList.Items.IndexOf(s) < 0 then begin
-    if customColor <> clRed then customColor := clBlue;
-  end;
-
-  // Commments and batch start/end commands are gray
-  ignores := Config.ReadString('general', 'CFG_IGNORE_LINES', '#').Split(',');
-  for s in ignores do begin
-    if fields[0] = s then customColor := clGray;
-  end;
-
-  if ListBox.Selected[Index] then begin
+  if odSelected in State then begin
     ListBox.Canvas.Brush.Color := customColor;
   end else begin
     ListBox.Canvas.Font.Color := customColor;
@@ -544,7 +624,7 @@ begin
 
   FeaturesList.Items.Clear;
   for s in CurCfgList.Items do begin
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'feature' then begin
         feature := fields[1];
 
@@ -564,12 +644,24 @@ begin
 end;
 
 procedure TForm1.FileReadBtnClick(Sender: TObject);
+var
+  i: Integer;
 begin
   if OpenDialog.Execute then begin
     if fileExists(OpenDialog.Filename) then begin
       FileNameEdit.Text := OpenDialog.FileName;
       CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
       if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
+
+      StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+      //setLength(CfgLineSts, CurCfgList.Items.Count);
+      for i := 0 to CurCfgList.Items.Count-1 do begin
+        CfgLineSts[i] := CfgCalcSts(i);
+        ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
+        ProgressBar.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+      end;
+      ProgressBar.Position := 0;
+
       FeaturesTabEnter(Sender);
       StatusLabel.Caption := 'Loaded ' + FileNameEdit.Text;
     end;
@@ -594,7 +686,7 @@ begin
   end else begin
     SaveDialog.FileName := 'config';
     for s in CurCfgList.Items do begin
-      fields := s.Split(' ');
+      fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
       if fields[0] = 'board_name' then SaveDialog.FileName := fields[1];
       if fields[0] = 'name' then begin
         if fields[1] <> '-' then SaveDialog.FileName := fields[1];
@@ -644,40 +736,6 @@ begin
   GetRcByFeature(feature, FeatureRcList.Items);
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  Config.Destroy;
-  Serial.Destroy;
-end;
-
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  FormWidth := Width;
-  TabWidth := DetailsTab.Width;
-  TabLeft := DetailsTab.Left;
-  GroupWidth := CurCfgGroup.Width;
-
-  UartCombo.OnClick(Sender);
-  Serial := TBlockSerial.Create;
-  Config := TIniFile.Create('flycfg.ini');
-  DetailsTab.ActivePage := FeaturesTab;
-  {$IFOPT D+}
-  DebugTab.TabVisible := True;
-  LogTab.TabVisible := True;
-  {$ENDIF}
-end;
-
-procedure TForm1.FormResize(Sender: TObject);
-var
-  ExtraWidth: Integer;
-begin
-  ExtraWidth := (Width - FormWidth) Div 2;
-
-  DetailsTab.Width := TabWidth + ExtraWidth;
-  DetailsTab.Left := TabLeft + ExtraWidth;
-  CurCfgGroup.Width := GroupWidth + ExtraWidth;
-end;
-
 procedure TForm1.LoadDefaultBtnClick(Sender: TObject);
 begin
   if MessageDlg ('Confirm', 'Reset the FC config to default and load it?', mtConfirmation,
@@ -716,7 +774,7 @@ begin
   SerialRcList.Items.Clear;
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'resource' then begin
       if Pos('SERIAL', fields[1]) = 1 then begin
         if StrToInt(fields[2]) = port then begin
@@ -749,7 +807,7 @@ var
 begin
   SerialList.Items.Clear;
   for s in CurCfgList.Items do begin
-    fields := s.Split(' ');
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
     if fields[0] = 'serial' then begin
         port := StrToInt(fields[1]) + 1;
         SerialList.Items.Add(IntToStr(port));
@@ -801,6 +859,7 @@ end;
 procedure TForm1.UartReadBtnClick(Sender: TObject);
 var
   s: String;
+  i: Integer;
 begin
   if not UartConnect() then Exit;
 
@@ -884,9 +943,18 @@ begin
      Exit;
   end;
 
+  StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  ActCfgList.Items := CurCfgList.Items;
+  //setLength(CfgLineSts, CurCfgList.Items.Count);
+  for i := 0 to CurCfgList.Items.Count-1 do begin
+    CfgLineSts[i] := CfgCalcSts(i);
+    ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
+    ProgressBar.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  end;
+  ProgressBar.Position := 0;
+
   Serial.CloseSocket;
   StatusLabel.Caption := 'Received active config from FC on ' + UartCombo.Text;
-  ActCfgList.Items := CurCfgList.Items;
   DetailsTab.ActivePage := FeaturesTab;
   FeaturesTab.Repaint;
   CurCfgList.Repaint;
