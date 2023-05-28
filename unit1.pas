@@ -145,10 +145,13 @@ begin
     Exit(False);
   end;
   s := '';
-  StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Repaint;
   for attempt := 1 to 10 do begin
     Serial.Connect(UartCombo.Text);
     if Serial.LastError <> 0 then begin
+      {$IFOPT D+}
+      LogList.Items.Add('conn err: ' + IntToStr(Serial.LastError));
+      {$ENDIF}
        Sleep(200);
        continue;
     end;
@@ -367,7 +370,7 @@ begin
 
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Repaint;
   for i := 0 to CurCfgList.Items.Count-1 do begin
     cmd := CurCfgList.Items[i];
     if (cmd = '') or (cmd[1] = '#') then continue;
@@ -386,7 +389,7 @@ begin
   end;
   ProgressBar.Position := 0;
 
-  StatusLabel.Caption := 'Saving FC config'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Saving FC config'; StatusLabel.Repaint;
   Serial.SendString('save' + #10);
   Serial.CloseSocket; // This commands resets the FC, there is no response
   Sleep(1500);
@@ -675,7 +678,7 @@ begin
   then begin
     if not UartConnect() then Exit;
 
-    StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Refresh;
+    StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Repaint;
     Serial.SendString('defaults' + #10);
     Serial.CloseSocket; // This commands resets the FC, there is no response
     Sleep(1500);
@@ -794,7 +797,7 @@ var
 begin
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Reading config diff'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Reading config diff'; StatusLabel.Repaint;
   Serial.SendString('diff' + #10);
   Serial.SendString('#' + #10);
   DiffCfgList.Items.Clear;
@@ -808,7 +811,7 @@ begin
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading config dump'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Reading config dump'; StatusLabel.Repaint;
   Serial.SendString('dump' + #10);
   Serial.SendString('#' + #10);
   CurCfgList.Items.Clear;
@@ -822,7 +825,7 @@ begin
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading active resources'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Reading active resources'; StatusLabel.Repaint;
   Serial.SendString('resource show' + #10);
   Serial.SendString('#' + #10);
   ActiveRcList.Items.Clear;
@@ -836,7 +839,7 @@ begin
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Refresh;
+  StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Repaint;
   Serial.SendString('get' + #10);
   Serial.SendString('#' + #10);
   AutoComleteList.Items.Clear;
@@ -854,8 +857,8 @@ begin
   StatusLabel.Caption := 'Received active config from FC on ' + UartCombo.Text;
   ActCfgList.Items := CurCfgList.Items;
   DetailsTab.ActivePage := FeaturesTab;
-  FeaturesTab.Refresh;
-  CurCfgList.Refresh;
+  FeaturesTab.Repaint;
+  CurCfgList.Repaint;
 end;
 
 end.

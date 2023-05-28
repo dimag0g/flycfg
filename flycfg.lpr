@@ -2,6 +2,11 @@ program flycfg;
 
 {$mode objfpc}{$H+}
 
+{$IFOPT D-}
+{$warn 9034 off}
+{$hints off}
+{$ENDIF}
+
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
