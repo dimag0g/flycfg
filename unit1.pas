@@ -145,7 +145,7 @@ begin
     Exit(False);
   end;
   s := '';
-  StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for attempt := 1 to 10 do begin
     Serial.Connect(UartCombo.Text);
     if Serial.LastError <> 0 then begin
@@ -157,10 +157,11 @@ begin
     end;
     Serial.Config(115200, 8, 'N', SB1, False, False);
     Serial.SendString('#' + #10);
-    if Serial.CanRead(200) then begin
+    if Serial.CanReadEx(200) then begin
       s := Serial.Recvstring(1000);
       {$IFOPT D+}
-      LogList.Items.Add('conn recv: ' + s);
+      LogList.Items.Add('# recv: ' + s);
+      LogList.Items.Add('# err: ' + IntToStr(Serial.LastError));
       {$ENDIF}
       if s = '#' then break;
     end;
@@ -370,7 +371,7 @@ begin
 
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for i := 0 to CurCfgList.Items.Count-1 do begin
     cmd := CurCfgList.Items[i];
     if (cmd = '') or (cmd[1] = '#') then continue;
@@ -379,17 +380,23 @@ begin
     while Serial.CanReadEx(1000) do begin
       s := Serial.Recvstring(1000);
       if s = '# #' then break;
+      if Serial.LastError <> 0 then break;
     end;
     if s <> '# #' then begin;
        StatusLabel.Caption := 'Failed to write: ' + cmd;
+       {$IFOPT D+}
+       LogList.Items.Add('wr recv: ' + s);
+       LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
+       {$ENDIF}
+       Serial.CloseSocket;
        Exit;
     end;
     ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
-    ProgressBar.Repaint;
+    ProgressBar.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   end;
   ProgressBar.Position := 0;
 
-  StatusLabel.Caption := 'Saving FC config'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Saving FC config'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('save' + #10);
   Serial.CloseSocket; // This commands resets the FC, there is no response
   Sleep(1500);
@@ -678,7 +685,7 @@ begin
   then begin
     if not UartConnect() then Exit;
 
-    StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Repaint;
+    StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
     Serial.SendString('defaults' + #10);
     Serial.CloseSocket; // This commands resets the FC, there is no response
     Sleep(1500);
@@ -797,59 +804,83 @@ var
 begin
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Reading config diff'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Reading config diff'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('diff' + #10);
   Serial.SendString('#' + #10);
   DiffCfgList.Items.Clear;
   while Serial.CanReadEx(1000) do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
+    if Serial.LastError <> 0 then break;
     DiffCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read diff config from FC on ' + UartCombo.Text;
+      {$IFOPT D+}
+      LogList.Items.Add('diff recv: ' + s);
+      LogList.Items.Add('diff err: ' + IntToStr(Serial.LastError));
+      {$ENDIF}
+     Serial.CloseSocket;
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading config dump'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Reading config dump'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('dump' + #10);
   Serial.SendString('#' + #10);
   CurCfgList.Items.Clear;
   while Serial.CanReadEx(1000) do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
+    if Serial.LastError <> 0 then break;
     CurCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read config dump from FC on ' + UartCombo.Text;
+     {$IFOPT D+}
+     LogList.Items.Add('dump recv: ' + s);
+     LogList.Items.Add('dump err: ' + IntToStr(Serial.LastError));
+     {$ENDIF}
+     Serial.CloseSocket;
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading active resources'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Reading active resources'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('resource show' + #10);
   Serial.SendString('#' + #10);
   ActiveRcList.Items.Clear;
   while Serial.CanReadEx(1000) do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
+    if Serial.LastError <> 0 then break;
     ActiveRcList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := 'Failed read active resources from FC on ' + UartCombo.Text;
-     Exit;
+    StatusLabel.Caption := 'Failed read active resources from FC on ' + UartCombo.Text;
+    {$IFOPT D+}
+    LogList.Items.Add('rc recv: ' + s);
+    LogList.Items.Add('rc err: ' + IntToStr(Serial.LastError));
+    {$ENDIF}
+    Serial.CloseSocket;
+    Exit;
   end;
 
-  StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Repaint;
+  StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('get' + #10);
   Serial.SendString('#' + #10);
   AutoComleteList.Items.Clear;
   while Serial.CanReadEx(1000) do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
+    if Serial.LastError <> 0 then break;
     AutoComleteList.Items.Add(s);
   end;
   if s <> '# #' then begin;
      StatusLabel.Caption := 'Failed read autocomplete data from FC on ' + UartCombo.Text;
+     {$IFOPT D+}
+     LogList.Items.Add('get recv: ' + s);
+     LogList.Items.Add('get err: ' + IntToStr(Serial.LastError));
+     {$ENDIF}
+     Serial.CloseSocket;
      Exit;
   end;
 
