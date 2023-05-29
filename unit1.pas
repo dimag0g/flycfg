@@ -99,6 +99,8 @@ type
     procedure LoadDefaultBtnClick(Sender: TObject);
     procedure LogClearButtonClick(Sender: TObject);
     procedure MenuWriteClick(Sender: TObject);
+    procedure SerialBaudBoxChange(Sender: TObject);
+    procedure SerialFnBoxChange(Sender: TObject);
     procedure SerialListSelectionChange(Sender: TObject; User: boolean);
     procedure SerialTabEnter(Sender: TObject);
     procedure UartComboClick(Sender: TObject);
@@ -435,6 +437,7 @@ begin
           if reasonActive then CurCfgList.Items[i] := 'beeper -' + reason
           else CurCfgList.Items[i] := 'beeper ' + reason;
           CurCfgList.ItemIndex := i;
+          CfgLineSts[i] := CfgCalcSts(i);
           break;
       end;
     end;
@@ -569,6 +572,67 @@ begin
 
 end;
 
+procedure TForm1.SerialBaudBoxChange(Sender: TObject);
+var
+  s: String;
+  i: Integer;
+  fields: TStringArray;
+  port: Integer;
+  portFunction: String;
+  portFnId: Integer;
+begin
+  if SerialList.ItemIndex < 0 then Exit;
+
+  port := StrToInt(SerialList.Items[SerialList.ItemIndex]);
+
+  for i := CurCfgList.Items.Count-1 downto 0 do begin
+    s := CurCfgList.Items[i];
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if fields[0] = 'serial' then begin
+      if StrToInt(fields[1]) = port-1 then begin
+        CurCfgList.ItemIndex := i;
+        portFnId := StrToInt(fields[2]);
+        if portFnId > 2 then portFnId := Trunc(Log2(portFnId+1))+1;
+        portFunction := SerialFnBox.Items[SerialFnBox.ItemIndex];
+        if Pos('MSP', portFunction) = 1 then fields[3] := SerialBaudBox.Text
+        else if Pos('GPS', portFunction) = 1 then fields[4] := SerialBaudBox.Text
+        else if Pos('TELEMETRY', portFunction) = 1 then fields[5] := SerialBaudBox.Text
+        else if Pos('BLACKBOX', portFunction) = 1 then fields[6] := SerialBaudBox.Text;
+        CurCfgList.Items[i] := String.Join(' ', fields);
+        CfgLineSts[i] := CfgCalcSts(i);
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.SerialFnBoxChange(Sender: TObject);
+var
+  s: String;
+  i: Integer;
+  fields: TStringArray;
+  port: Integer;
+  portFnId: Integer;
+begin
+  if SerialList.ItemIndex < 0 then Exit;
+
+  port := StrToInt(SerialList.Items[SerialList.ItemIndex]);
+
+  for i := CurCfgList.Items.Count-1 downto 0 do begin
+    s := CurCfgList.Items[i];
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if fields[0] = 'serial' then begin
+      if StrToInt(fields[1]) = port-1 then begin
+        CurCfgList.ItemIndex := i;
+        portFnId := SerialFnBox.ItemIndex;
+        if portFnId > 2 then portFnId := Round(IntPower(2, portFnId-1));
+        fields[2] := IntToStr(portFnId);
+        CurCfgList.Items[i] := String.Join(' ', fields);
+        CfgLineSts[i] := CfgCalcSts(i);
+      end;
+    end;
+  end;
+end;
+
 procedure TForm1.FeaturesListClickCheck(Sender: TObject);
 var
   s: String;
@@ -591,6 +655,7 @@ begin
           if featureActive then CurCfgList.Items[i] := 'feature -' + feature
           else CurCfgList.Items[i] := 'feature '+feature;
           CurCfgList.ItemIndex := i;
+          CfgLineSts[i] := CfgCalcSts(i);
           break;
       end;
     end;

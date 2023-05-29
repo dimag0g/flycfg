@@ -961,6 +961,7 @@ object Form1: TForm1
         Items.Strings = (
           'NONE'
         )
+        OnChange = SerialFnBoxChange
         Style = csDropDownList
         TabOrder = 1
         Text = 'NONE'
@@ -971,6 +972,7 @@ object Form1: TForm1
         Top = 216
         Width = 100
         ItemHeight = 15
+        OnChange = SerialBaudBoxChange
         TabOrder = 2
         Text = 'NONE'
       end
