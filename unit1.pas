@@ -30,6 +30,12 @@ type
     Label26: TLabel;
     Label8: TLabel;
     LogList: TListBox;
+    MenuWriteCustom: TMenuItem;
+    MenuWriteValid: TMenuItem;
+    MenuWriteLine: TMenuItem;
+    MenuWriteUnsaved: TMenuItem;
+    MenuWriteAll: TMenuItem;
+    WriteMenu: TPopupMenu;
     StatusLabel: TLabel;
     ProgressBar: TProgressBar;
     SerialRcList: TListBox;
@@ -92,6 +98,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure LoadDefaultBtnClick(Sender: TObject);
     procedure LogClearButtonClick(Sender: TObject);
+    procedure MenuWriteClick(Sender: TObject);
     procedure SerialListSelectionChange(Sender: TObject; User: boolean);
     procedure SerialTabEnter(Sender: TObject);
     procedure UartComboClick(Sender: TObject);
@@ -486,32 +493,54 @@ end;
 
 procedure TForm1.UartWriteBtnClick(Sender: TObject);
 var
-  s: String;
-  i: Integer;
-  cmd: String;
+  lowerLeft: TPoint;
 begin
   if CurCfgList.Items.Count = 0 then begin
     StatusLabel.Caption := 'Nothing to write!';
     Exit;
   end;
 
+  lowerLeft := Point(0, UartWriteBtn.Height);
+  lowerLeft := UartWriteBtn.ClientToScreen(lowerLeft);
+  WriteMenu.Popup(lowerLeft.X, lowerLeft.Y);
+end;
+
+procedure TForm1.MenuWriteClick(Sender: TObject);
+var
+  s: String;
+  i: Integer;
+  cmd: String;
+  mask: Integer;
+begin
+  if Sender = MenuWriteUnsaved then mask := CFG_MASK_BLUE
+  else if Sender = MenuWriteCustom then mask := CFG_MASK_GREEN
+  else if Sender = MenuWriteValid then mask := not CFG_MASK_RED
+  else if Sender = MenuWriteAll then mask := not CFG_LINE_COMMENT
+  else mask := 0; // Write selected lines
+
   if not UartConnect() then Exit;
 
   StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for i := 0 to CurCfgList.Items.Count-1 do begin
+    if mask = 0 then begin
+       if not CurCfgList.Selected[i] then continue;
+    end else if (CfgLineSts[i] and mask) = 0 then continue;
+
     cmd := CurCfgList.Items[i];
     if (cmd = '') or (cmd[1] = '#') then continue;
     Serial.SendString(cmd + #10);
     Serial.SendString('#' + #10);
     while Serial.CanReadEx(1000) do begin
       s := Serial.Recvstring(1000);
+      {$IFOPT D+}
+      LogList.Items.Add('wr recv: ' + s);
+      {$ENDIF}
       if s = '# #' then break;
       if Serial.LastError <> 0 then break;
     end;
     if s <> '# #' then begin;
        StatusLabel.Caption := 'Failed to write: ' + cmd;
        {$IFOPT D+}
-       LogList.Items.Add('wr recv: ' + s);
        LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
        {$ENDIF}
        ProgressBar.Position := 0;
@@ -530,6 +559,7 @@ begin
 
   ActCfgList.Items := CurCfgList.Items;
   UartReadBtnClick(Sender); // Re-read configuration after a save
+
 end;
 
 procedure TForm1.FeaturesListClickCheck(Sender: TObject);
@@ -943,6 +973,8 @@ begin
      Exit;
   end;
 
+  Serial.CloseSocket;
+
   StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   ActCfgList.Items := CurCfgList.Items;
   //setLength(CfgLineSts, CurCfgList.Items.Count);
@@ -953,7 +985,6 @@ begin
   end;
   ProgressBar.Position := 0;
 
-  Serial.CloseSocket;
   StatusLabel.Caption := 'Received active config from FC on ' + UartCombo.Text;
   DetailsTab.ActivePage := FeaturesTab;
   FeaturesTab.Repaint;
