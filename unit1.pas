@@ -213,7 +213,10 @@ begin
   end else begin
     if DiffCfgList.Items.IndexOf(s) >= 0 then Result := Result or CFG_LINE_IN_DIFF;
     if (ActCfgList.Items.Count <= index) or (ActCfgList.Items[index] <> s) then begin
-      if ActCfgList.Items.IndexOf(s) < 0 then Result := Result or CFG_LINE_UNSAVED;
+      i := index + ActCfgList.Items.Count - CurCfgList.Items.Count;
+      if (i < 0) or (ActCfgList.Items.Count <= i) or (ActCfgList.Items[i] <> s) then begin
+        if ActCfgList.Items.IndexOf(s) < 0 then Result := Result or CFG_LINE_UNSAVED;
+      end;
     end;
 
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty); // s is recycled at this point
@@ -530,7 +533,11 @@ begin
     if (cmd = '') or (cmd[1] = '#') then continue;
     Serial.SendString(cmd + #10);
     Serial.SendString('#' + #10);
-    while Serial.CanReadEx(1000) do begin
+    if not Serial.CanRead(1000) then begin
+      Serial.SendString(cmd + #10); // Retry once
+      Serial.SendString('#' + #10);
+    end;
+    while True do begin
       s := Serial.Recvstring(1000);
       {$IFOPT D+}
       LogList.Items.Add('wr recv: ' + s);
@@ -897,7 +904,7 @@ begin
   Serial.SendString('diff' + #10);
   Serial.SendString('#' + #10);
   DiffCfgList.Items.Clear;
-  while Serial.CanReadEx(1000) do begin
+  while True do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
     if Serial.LastError <> 0 then break;
@@ -917,7 +924,7 @@ begin
   Serial.SendString('dump' + #10);
   Serial.SendString('#' + #10);
   CurCfgList.Items.Clear;
-  while Serial.CanReadEx(1000) do begin
+  while True do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
     if Serial.LastError <> 0 then break;
@@ -937,7 +944,7 @@ begin
   Serial.SendString('resource show' + #10);
   Serial.SendString('#' + #10);
   ActiveRcList.Items.Clear;
-  while Serial.CanReadEx(1000) do begin
+  while True do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
     if Serial.LastError <> 0 then break;
@@ -957,7 +964,7 @@ begin
   Serial.SendString('get' + #10);
   Serial.SendString('#' + #10);
   AutoComleteList.Items.Clear;
-  while Serial.CanReadEx(1000) do begin
+  while True do begin
     s := Serial.Recvstring(1000);
     if s = '# #' then break;
     if Serial.LastError <> 0 then break;
