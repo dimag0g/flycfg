@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, CheckLst, Menus, EditBtn, IniFiles, lazsynaser, LazSerial, Types,
+  ExtCtrls, CheckLst, Menus, IniFiles, lazsynaser, LazSerial, Types,
   Math, LCLType; // Grids
 
 type
@@ -136,9 +136,10 @@ const
   CFG_MASK_GREEN    = $00F0;
   CFG_LINE_UNSAVED  = $0100;
   CFG_MASK_BLUE     = $0F00;
-  CFG_LINE_NO_ALLOC = $1000; // Resource not allocated
-  CFG_LINE_NO_NAME  = $2000; // Invalid setting name
-  CFG_LINE_INVALID  = $2000; // Invalid value
+  CFG_LINE_NOT_ALLOC  = $1000; // Resource not allocated
+  CFG_LINE_BAD_NAME   = $2000; // Invalid setting name
+  CFG_LINE_BAD_VALUE  = $4000; // Invalid value
+  CFG_LINE_BAD_FORMAT = $8000; // Invalid value
   CFG_MASK_RED      = $F000;
 
 var
@@ -222,14 +223,20 @@ begin
     end;
 
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty); // s is recycled at this point
+    if Length(fields) < 1 then Exit;
     ignores := Config.ReadString('general', 'CFG_IGNORE_LINES', '#').Split(',');
     for s in ignores do begin
       if fields[0] = s then Result := CFG_LINE_COMMENT;
     end;
 
     if fields[0] = 'feature' then begin
-      if fields[1][1] = '-' then Result := Result or CFG_LINE_INACTIVE;
+      if Length(fields) < 2 then Result := Result or CFG_LINE_BAD_FORMAT
+      else if fields[1][1] = '-' then Result := Result or CFG_LINE_INACTIVE;
     end else if fields[0] = 'set' then begin
+      if Length(fields) < 4 then begin
+         Result := Result or CFG_LINE_BAD_FORMAT;
+         Exit;
+      end;
       if fields[3] = 'OFF' then Result := Result or CFG_LINE_INACTIVE;
       if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE;
 
@@ -238,31 +245,36 @@ begin
         if Pos(fields[1] + ' = ', AutoComleteList.Items[i]) = 1 then begin
            s := AutoComleteList.Items[i+1];
            autoFields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
-           if autoFields[0] <> 'Allowed' then begin
+           if (Length(autoFields) < 1) or (autoFields[0] <> 'Allowed') then begin
              s := AutoComleteList.Items[i+2];
              autoFields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
-             if autoFields[0] <> 'Allowed' then break;
+             if (Length(autoFields) < 1) or (autoFields[0] <> 'Allowed') then break;
            end;
            if autoFields[1] = 'range:' then begin
-             if StrToFloat(fields[3]) < StrToFloat(autoFields[2]) then Result := Result or CFG_LINE_INVALID;
-             if StrToFloat(fields[3]) > StrToFloat(autoFields[4]) then Result := Result or CFG_LINE_INVALID;
+             if StrToFloat(fields[3]) < StrToFloat(autoFields[2]) then Result := Result or CFG_LINE_BAD_VALUE;
+             if StrToFloat(fields[3]) > StrToFloat(autoFields[4]) then Result := Result or CFG_LINE_BAD_VALUE;
            end;
           if autoFields[1] = 'values:' then begin
-            if Pos(fields[3], s) = 0 then Result := Result or CFG_LINE_INVALID;
+            if Pos(fields[3], s) = 0 then Result := Result or CFG_LINE_BAD_VALUE;
           end;
            break;
         end;
       end;
-      if i = AutoComleteList.Items.Count-2 then Result := Result or CFG_LINE_NO_NAME;
+      if i = AutoComleteList.Items.Count-2 then Result := Result or CFG_LINE_BAD_NAME;
 
     end else if fields[0] = 'dma' then begin
-      if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE;
+      if Length(fields) < 4 then Result := Result or CFG_LINE_BAD_FORMAT
+      else if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE;
     end else if fields[0] = 'resource' then begin
+      if Length(fields) < 4 then begin
+         Result := Result or CFG_LINE_BAD_FORMAT;
+         Exit;
+      end;
       if fields[3] = 'NONE' then Result := Result or CFG_LINE_INACTIVE
-      else if ActiveRcList.Items.Count > 0 then begin
+      else if ActiveRcList.Items.Count > 10 then begin
         if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1] + ' ' + fields[2]) < 0 then begin
           if ActiveRcList.Items.IndexOf(fields[3] + ': ' + fields[1]) < 0 then begin
-            if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then Result := Result or CFG_LINE_NO_ALLOC
+            if ActiveRcList.Items.IndexOf(fields[3] + ': FREE') < 0 then Result := Result or CFG_LINE_NOT_ALLOC
             else Result := Result or CFG_LINE_INACTIVE;
           end;
         end;
@@ -322,6 +334,7 @@ begin
   RcList.Clear;
   for s in CurCfgList.Items do begin
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if (fields[0] = 'resource') or (fields[0] = 'dma') then begin
       if Pos(featureRcPrefix, fields[1]) = 1 then begin
          RcList.Add(s);
@@ -352,6 +365,7 @@ begin
   BeeperRcList.Items.Clear;
   for s in CurCfgList.Items do begin
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if fields[0] = 'beeper' then begin
         feature := fields[1];
 
@@ -426,6 +440,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if fields[0] = 'beeper' then begin
       reason := fields[1];
       reasonActive := False;
@@ -588,6 +603,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 7 then continue;
     if fields[0] = 'serial' then begin
       if StrToInt(fields[1]) = port-1 then begin
         CurCfgList.ItemIndex := i;
@@ -620,6 +636,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 7 then continue;
     if fields[0] = 'serial' then begin
       if StrToInt(fields[1]) = port-1 then begin
         CurCfgList.ItemIndex := i;
@@ -644,6 +661,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if fields[0] = 'feature' then begin
       feature := fields[1];
       featureActive := False;
@@ -727,6 +745,7 @@ begin
   FeaturesList.Items.Clear;
   for s in CurCfgList.Items do begin
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if fields[0] = 'feature' then begin
         feature := fields[1];
 
@@ -877,6 +896,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     s := CurCfgList.Items[i];
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 3 then continue;
     if fields[0] = 'resource' then begin
       if Pos('SERIAL', fields[1]) = 1 then begin
         if StrToInt(fields[2]) = port then begin
@@ -884,6 +904,7 @@ begin
         end;
       end;
     end;
+    if Length(fields) < 7 then continue;
     if fields[0] = 'serial' then begin
       if StrToInt(fields[1]) = port-1 then begin
         CurCfgList.ItemIndex := i;
@@ -910,6 +931,7 @@ begin
   SerialList.Items.Clear;
   for s in CurCfgList.Items do begin
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 2 then continue;
     if fields[0] = 'serial' then begin
         port := StrToInt(fields[1]) + 1;
         SerialList.Items.Add(IntToStr(port));
@@ -955,7 +977,8 @@ begin
     end;
   end;
 
-  if UartCombo.Items.IndexOf(UartCombo.Text) = -1 then UartCombo.Text := UartCombo.Items[0];
+  if (UartCombo.Items.Count > 0) and
+     (UartCombo.Items.IndexOf(UartCombo.Text) = -1) then UartCombo.Text := UartCombo.Items[0];
 end;
 
 procedure TForm1.UartReadBtnClick(Sender: TObject);
