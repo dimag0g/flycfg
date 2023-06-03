@@ -229,11 +229,11 @@ begin
       if fields[0] = s then Result := CFG_LINE_COMMENT;
     end;
 
-    if fields[0] = 'feature' then begin
-      if Length(fields) < 2 then Result := Result or CFG_LINE_BAD_FORMAT
+    if (fields[0] = 'feature') or (fields[0] = 'beeper') or (fields[0] = 'beacon') then begin
+      if Length(fields) <> 2 then Result := Result or CFG_LINE_BAD_FORMAT
       else if fields[1][1] = '-' then Result := Result or CFG_LINE_INACTIVE;
     end else if fields[0] = 'set' then begin
-      if Length(fields) < 4 then begin
+      if Length(fields) <> 4 then begin
          Result := Result or CFG_LINE_BAD_FORMAT;
          Exit;
       end;
@@ -768,26 +768,32 @@ procedure TForm1.FileReadBtnClick(Sender: TObject);
 var
   i: Integer;
 begin
-  if OpenDialog.Execute then begin
-    if fileExists(OpenDialog.Filename) then begin
-      FileNameEdit.Text := OpenDialog.FileName;
-      CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
-      if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
-
-      StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
-      //setLength(CfgLineSts, CurCfgList.Items.Count);
-      for i := 0 to CurCfgList.Items.Count-1 do begin
-        CfgLineSts[i] := CfgCalcSts(i);
-        ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
-        ProgressBar.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
-      end;
-      ProgressBar.Position := 0;
-
-      FeaturesTabEnter(Sender);
-      StatusLabel.Caption := 'Loaded ' + FileNameEdit.Text;
-    end;
-  end else begin
+  if Sender <> nil then
+    if not OpenDialog.Execute then begin
     StatusLabel.Caption := 'Loading aborted';
+    Exit;
+    // Else: event triggered internally, don't display dialog
+  end;
+
+  if not fileExists(OpenDialog.Filename) then begin
+    StatusLabel.Caption := 'File not found: ' + OpenDialog.Filename;
+    Exit;
+  end else begin
+    FileNameEdit.Text := OpenDialog.FileName;
+    CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
+    if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
+
+    StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+    //setLength(CfgLineSts, CurCfgList.Items.Count);
+    for i := 0 to CurCfgList.Items.Count-1 do begin
+      CfgLineSts[i] := CfgCalcSts(i);
+      ProgressBar.Position := Trunc(100*i / CurCfgList.Items.Count);
+      ProgressBar.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+    end;
+    ProgressBar.Position := 0;
+
+    FeaturesTabEnter(Sender);
+    StatusLabel.Caption := 'Loaded ' + FileNameEdit.Text;
   end;
 end;
 
@@ -801,29 +807,31 @@ begin
     Exit;
   end;
 
-  // Try to guess a file name
   if FileNameEdit.Text <> '' then begin
     SaveDialog.FileName := FileNameEdit.Text;
-  end else begin
-    SaveDialog.FileName := 'config';
+  end else begin // Try to guess a file name
+    SaveDialog.FileName := 'config.cfg';
     for s in CurCfgList.Items do begin
       fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
-      if fields[0] = 'board_name' then SaveDialog.FileName := fields[1];
+      if Length(fields) < 2 then continue;
+      if fields[0] = 'board_name' then SaveDialog.FileName := fields[1] + '.cfg';
       if fields[0] = 'name' then begin
-        if fields[1] <> '-' then SaveDialog.FileName := fields[1];
+        if fields[1] <> '-' then SaveDialog.FileName := fields[1] + '.cfg';
         break;
       end;
     end;
   end;
 
-  if SaveDialog.Execute then
-  begin
-    FileNameEdit.Text := SaveDialog.FileName;
-    CurCfgList.Items.SaveToFile(FileNameEdit.Text);
-    StatusLabel.Caption := 'Saved ' + FileNameEdit.Text;
-  end else begin
+  if Sender <> nil then
+    if not SaveDialog.Execute then begin
     StatusLabel.Caption := 'Saving aborted';
+    Exit;
+    // Else: event triggered internally, don't display dialog
   end;
+
+  FileNameEdit.Text := SaveDialog.FileName;
+  CurCfgList.Items.SaveToFile(FileNameEdit.Text);
+  StatusLabel.Caption := 'Saved ' + FileNameEdit.Text;
 end;
 
 procedure TForm1.FindButtonClick(Sender: TObject);

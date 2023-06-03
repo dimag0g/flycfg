@@ -31,9 +31,14 @@ On Linux (including Raspberry Pi), run `sudo apt install lazarus`
 
 To build FlyCfg, you'll need to clone the repo (including the submodules), and then run the following command:
 
-    git clone --recurse-submodules https://github.com/dimag0g/flycfg
-    lazbuild --build-mode="Release" flycfg/flycfg.lpi
- 
+    git clone --recurse-submodules https://github.com/dimag0g/flycfg && cd flycfg
+    lazbuild --build-mode="Release" flycfg.lpi
+
+Before a release or a pull request, it's advised to run tests:
+
+    lazbuild fpcunittest.lpi && fpcunittest
+
+If you have an FC board, having it connected during a test run allow to test reading (but not writing!) the FC config. The rest of the tests use a dummy config file, `test.cfg`.
 
 Licenses
 ---

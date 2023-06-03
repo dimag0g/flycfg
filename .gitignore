@@ -8,8 +8,12 @@
 *.a
 *.apk
 *.so
+*.7z
+*.xz
+*.deb
 lib/
 backup/
 
 # Project-specific files
 flycfg
+fpcunittest*
