@@ -1,0 +1,13 @@
+Source: flycfg
+Maintainer: Dmitry Grigoryev <dmitry.grigoryev@outlook.com>
+Section: x11
+Priority: optional
+Standards-Version: 4.5.1
+Build-Depends: fpc, lazarus, lcl, lcl-utils, debhelper (>= 8)
+
+Package: flycfg
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+Description: Simple flight controller configurator
+ FlyCfg allows you to read/write/analyze your Flight Controller
+ configuration using its command line interface.

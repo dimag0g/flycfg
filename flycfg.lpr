@@ -19,7 +19,6 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
-  Application.Title:='FlyCfg';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);

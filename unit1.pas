@@ -109,7 +109,7 @@ type
     procedure UartWriteBtnClick(Sender: TObject);
   private
     Serial: TBlockSerial;
-    Config: TIniFile;
+    Config: TMemIniFile;
 
     // Proportional resize variables
     FormWidth: Integer;
@@ -170,7 +170,11 @@ begin
 
   UartCombo.OnClick(Sender);
   Serial := TBlockSerial.Create;
-  Config := TIniFile.Create(ExtractFilePath(Application.ExeName) + DirectorySeparator + 'flycfg.ini');
+  {$IFDEF Windows}
+  Config := TMemIniFile.Create(ExtractFilePath(Application.ExeName) + 'flycfg.ini');
+  {$ELSE}
+  Config := TMemIniFile.Create(GetAppConfigDir(True) + 'flycfg.ini');
+  {$ENDIF}
   DetailsTab.ActivePage := FeaturesTab;
   {$IFOPT D+}
   DebugTab.TabVisible := True;

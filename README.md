@@ -1,7 +1,7 @@
 # FlyCfg
 Simple flight controller configurator
 
-FlyCfg allows you to read/write/analyze your Flight Controller config using CLI. It uses colors and tabs to draw attention to information you'll be most likely interested in.
+FlyCfg allows you to read/write/analyze your Flight Controller configuration using its command line interface. It uses colors and tabs to draw attention to information you'll be most likely interested in.
 
 FlyCfg primarily supports Betaflight, but can be used with similar FC software (e.g. iNav) to some extent.
 
