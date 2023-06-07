@@ -6,13 +6,14 @@ set -e
 
 version=`git -C .. describe --tags`
 
-mkdir -p flycfg-$version/
+mkdir -p flycfg-$version/locale
 cp ../*.lpi flycfg-$version/
 cp ../*.lpr flycfg-$version/
 cp ../*.pas flycfg-$version/
 cp ../*.lfm flycfg-$version/
 cp ../*.ico flycfg-$version/
 cp ../*.ini flycfg-$version/
+cp ../locale/*.po flycfg-$version/locale
 
 
 tar czf flycfg_$version.orig.tar.gz flycfg-$version

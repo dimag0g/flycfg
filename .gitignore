@@ -11,9 +11,11 @@
 *.7z
 *.xz
 *.deb
+*.mo
 lib/
 backup/
 
 # Project-specific files
 flycfg
-fpcunittest*
+fpcunittest
+fpcunittest.fpcunit.ini

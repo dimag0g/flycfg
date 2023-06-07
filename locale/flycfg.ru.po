@@ -1,0 +1,205 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: ru\n"
+
+#: tform1.beepertab.caption
+msgid "Beeper"
+msgstr "Пищалка"
+
+#: tform1.caption
+msgid "FlyCfg"
+msgstr ""
+
+#: tform1.curcfggroup.caption
+msgctxt "tform1.curcfggroup.caption"
+msgid "Current config"
+msgstr "Текущая конфигурация"
+
+#: tform1.debugtab.caption
+msgid "Debug"
+msgstr "Отладка"
+
+#: tform1.featurestab.caption
+msgid "Features"
+msgstr "Функции"
+
+#: tform1.filereadbtn.caption
+msgid "Load"
+msgstr "Загрузить"
+
+#: tform1.filereadbtn.hint
+msgid "Load the current configuration from a file"
+msgstr "Загрузка текущей конфигурации из файла"
+
+#: tform1.filewritebtn.caption
+msgid "Save"
+msgstr "Сохранить"
+
+#: tform1.filewritebtn.hint
+msgid "Write the current configuration to a file"
+msgstr "Запись текущей конфигурации в файл"
+
+#: tform1.findbox.text
+msgid "<search>"
+msgstr "<поиск>"
+
+#: tform1.findbutton.caption
+msgid "Find"
+msgstr "Найти"
+
+#: tform1.label1.caption
+msgid "Selectable Features:"
+msgstr "Выбираемые функции:"
+
+#: tform1.label12.caption
+msgid "Legend:"
+msgstr "Легенда:"
+
+#: tform1.label13.caption
+msgid "Default"
+msgstr ""
+
+#: tform1.label14.caption
+msgid "Inactive"
+msgstr ""
+
+#: tform1.label15.caption
+msgid "Custom"
+msgstr ""
+
+#: tform1.label16.caption
+msgid "Invalid"
+msgstr ""
+
+#: tform1.label2.caption
+msgid "Feature resources/settings:"
+msgstr "Ресурсы/параметры функции:"
+
+#: tform1.label21.caption
+msgid "Unsaved"
+msgstr ""
+
+#: tform1.label23.caption
+msgid "Function:"
+msgstr "Функция:"
+
+#: tform1.label24.caption
+msgid "Baudrate:"
+msgstr "Скорость:"
+
+#: tform1.label25.caption
+msgid "Serial ports:"
+msgstr "Доступные порты:"
+
+#: tform1.label26.caption
+msgid "Serial resources:"
+msgstr "Ресурсы порта:"
+
+#: tform1.label3.caption
+msgid "Config file:"
+msgstr "Файл конфигурации:"
+
+#: tform1.label4.caption
+msgid "Beeper alarms:"
+msgstr "Пищалка"
+
+#: tform1.label5.caption
+msgid "Beeper resources/settings:"
+msgstr ""
+
+#: tform1.label6.caption
+msgctxt "tform1.label6.caption"
+msgid "Current config:"
+msgstr "Текущая конфигурация:"
+
+#: tform1.label7.caption
+msgid "FC Port:"
+msgstr "Порт КП:"
+
+#: tform1.label8.caption
+msgid "Static Features:"
+msgstr "Фиксированные функции:"
+
+#: tform1.loaddefaultbtn.caption
+msgid "Reset"
+msgstr "Сброс"
+
+#: tform1.loaddefaultbtn.hint
+msgid "Reset the FC configration to defaults and read it"
+msgstr "Сбросить конфигурацию FC на значения по умолчанию и загрузить ее"
+
+#: tform1.logclearbutton.caption
+msgid "Clear"
+msgstr "Очистить"
+
+#: tform1.logtab.caption
+msgid "Log"
+msgstr "Лог"
+
+#: tform1.menuwriteall.caption
+msgid "Write All"
+msgstr "Записать всё"
+
+#: tform1.menuwritecustom.caption
+msgid "Write Custom"
+msgstr "Записать измененные"
+
+#: tform1.menuwriteline.caption
+msgid "Write Selected"
+msgstr "Записать выбранные"
+
+#: tform1.menuwriteunsaved.caption
+msgid "Write Unsaved"
+msgstr "Записать несохранённые"
+
+#: tform1.menuwritevalid.caption
+msgid "Write Valid"
+msgstr "Записать корректные"
+
+#: tform1.serialbaudbox.text
+msgctxt "tform1.serialbaudbox.text"
+msgid "NONE"
+msgstr "НЕТ"
+
+#: tform1.serialfnbox.text
+msgctxt "tform1.serialfnbox.text"
+msgid "NONE"
+msgstr "НЕТ"
+
+#: tform1.serialtab.caption
+msgid "Serial"
+msgstr "Порт"
+
+#: tform1.statuslabel.caption
+msgid "Ready"
+msgstr "Готов"
+
+#: tform1.uartcombo.text
+msgid "No serial"
+msgstr "Нет КП"
+
+#: tform1.uartreadbtn.caption
+msgid "Read"
+msgstr "Читать"
+
+#: tform1.uartreadbtn.hint
+msgid "Read the active configuration from the FC"
+msgstr "Считывание активной конфигурации с КП"
+
+#: tform1.uartwritebtn.caption
+msgid "Write"
+msgstr ""
+
+#: tform1.uartwritebtn.hint
+msgid "Write the current configuration to the FC"
+msgstr "Запись текущей конфигурации в файл"

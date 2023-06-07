@@ -8,12 +8,15 @@ override_dh_auto_clean:
 
 override_dh_auto_build:
 	lazbuild --build-mode="Release" flycfg.lpi
+	msgfmt locale/flycfg.ru.po -o locale/flycfg.ru.mo
 
 override_dh_auto_install:
 	install -d -m 755 $(ROOT)/usr/bin
 	install -s -m 755 flycfg $(ROOT)/usr/bin
 	install -d -m 755 $(ROOT)/etc/flycfg
 	install -m 644 flycfg.ini $(ROOT)/etc/flycfg
+	install -d -m 755 $(ROOT)/usr/share/locale/ru/LC_MESSAGES
+	install -m 644 locale/flycfg.ru.mo $(ROOT)/usr/share/locale/ru/LC_MESSAGES/flycfg.mo
 
 %:
 	dh $@

@@ -1,0 +1,195 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform1.beepertab.caption
+msgid "Beeper"
+msgstr ""
+
+#: tform1.caption
+msgid "FlyCfg"
+msgstr ""
+
+#: tform1.curcfggroup.caption
+msgctxt "tform1.curcfggroup.caption"
+msgid "Current config"
+msgstr ""
+
+#: tform1.debugtab.caption
+msgid "Debug"
+msgstr ""
+
+#: tform1.featurestab.caption
+msgid "Features"
+msgstr ""
+
+#: tform1.filereadbtn.caption
+msgid "Load"
+msgstr ""
+
+#: tform1.filereadbtn.hint
+msgid "Load the current configuration from a file"
+msgstr ""
+
+#: tform1.filewritebtn.caption
+msgid "Save"
+msgstr ""
+
+#: tform1.filewritebtn.hint
+msgid "Write the current configuration to a file"
+msgstr ""
+
+#: tform1.findbox.text
+msgid "<search>"
+msgstr ""
+
+#: tform1.findbutton.caption
+msgid "Find"
+msgstr ""
+
+#: tform1.label1.caption
+msgid "Selectable Features:"
+msgstr ""
+
+#: tform1.label12.caption
+msgid "Legend:"
+msgstr ""
+
+#: tform1.label13.caption
+msgid "Default"
+msgstr ""
+
+#: tform1.label14.caption
+msgid "Inactive"
+msgstr ""
+
+#: tform1.label15.caption
+msgid "Custom"
+msgstr ""
+
+#: tform1.label16.caption
+msgid "Invalid"
+msgstr ""
+
+#: tform1.label2.caption
+msgid "Feature resources/settings:"
+msgstr ""
+
+#: tform1.label21.caption
+msgid "Unsaved"
+msgstr ""
+
+#: tform1.label23.caption
+msgid "Function:"
+msgstr ""
+
+#: tform1.label24.caption
+msgid "Baudrate:"
+msgstr ""
+
+#: tform1.label25.caption
+msgid "Serial ports:"
+msgstr ""
+
+#: tform1.label26.caption
+msgid "Serial resources:"
+msgstr ""
+
+#: tform1.label3.caption
+msgid "Config file:"
+msgstr ""
+
+#: tform1.label4.caption
+msgid "Beeper alarms:"
+msgstr ""
+
+#: tform1.label5.caption
+msgid "Beeper resources/settings:"
+msgstr ""
+
+#: tform1.label6.caption
+msgctxt "tform1.label6.caption"
+msgid "Current config:"
+msgstr ""
+
+#: tform1.label7.caption
+msgid "FC Port:"
+msgstr ""
+
+#: tform1.label8.caption
+msgid "Static Features:"
+msgstr ""
+
+#: tform1.loaddefaultbtn.caption
+msgid "Reset"
+msgstr ""
+
+#: tform1.loaddefaultbtn.hint
+msgid "Reset the FC configration to defaults and read it"
+msgstr ""
+
+#: tform1.logclearbutton.caption
+msgid "Clear"
+msgstr ""
+
+#: tform1.logtab.caption
+msgid "Log"
+msgstr ""
+
+#: tform1.menuwriteall.caption
+msgid "Write All"
+msgstr ""
+
+#: tform1.menuwritecustom.caption
+msgid "Write Custom"
+msgstr ""
+
+#: tform1.menuwriteline.caption
+msgid "Write Selected"
+msgstr ""
+
+#: tform1.menuwriteunsaved.caption
+msgid "Write Unsaved"
+msgstr ""
+
+#: tform1.menuwritevalid.caption
+msgid "Write Valid"
+msgstr ""
+
+#: tform1.serialbaudbox.text
+msgctxt "tform1.serialbaudbox.text"
+msgid "NONE"
+msgstr ""
+
+#: tform1.serialfnbox.text
+msgctxt "tform1.serialfnbox.text"
+msgid "NONE"
+msgstr ""
+
+#: tform1.serialtab.caption
+msgid "Serial"
+msgstr ""
+
+#: tform1.statuslabel.caption
+msgid "Ready"
+msgstr ""
+
+#: tform1.uartcombo.text
+msgid "No serial"
+msgstr ""
+
+#: tform1.uartreadbtn.caption
+msgid "Read"
+msgstr ""
+
+#: tform1.uartreadbtn.hint
+msgid "Read the active configuration from the FC"
+msgstr ""
+
+#: tform1.uartwritebtn.caption
+msgid "Write"
+msgstr ""
+
+#: tform1.uartwritebtn.hint
+msgid "Write the current configuration to the FC"
+msgstr ""
+

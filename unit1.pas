@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   ExtCtrls, CheckLst, Menus, IniFiles, lazsynaser, LazSerial, Types,
-  Math, LCLType; // Grids
+  Math, LCLType, LCLTranslator, Gettext;
 
 type
 
@@ -160,6 +160,8 @@ end;
 {$POP}
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  langId, fallbackLangId: String;
 begin
   FormWidth := Width;
   TabWidth := DetailsTab.Width;
@@ -167,6 +169,12 @@ begin
   GroupWidth := CurCfgGroup.Width;
 
   setLength(CfgLineSts, 10000);
+
+  if (ParamCount = 2) and (ParamStr(1) = '--lang') then SetDefaultLang(ParamStr(2))
+  else begin
+    GetLanguageIDs(langId, fallbackLangId);
+    SetDefaultLang(fallbackLangId);
+  end;
 
   UartCombo.OnClick(Sender);
   Serial := TBlockSerial.Create;
