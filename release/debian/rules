@@ -7,7 +7,7 @@ override_dh_auto_clean:
 	$(RM) lib *.res flycfg
 
 override_dh_auto_build:
-	lazbuild --build-mode="Release" flycfg.lpi
+	lazbuild --build-mode="Release" TLazSerial/LazSerialPort.lpk flycfg.lpi
 	msgfmt locale/flycfg.ru.po -o locale/flycfg.ru.mo
 
 override_dh_auto_install:

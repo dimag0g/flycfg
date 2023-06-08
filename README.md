@@ -32,7 +32,7 @@ On Linux (including Raspberry Pi), run `sudo apt install lazarus`
 To build FlyCfg, you'll need to clone the repo (including the submodules), and then run the following command:
 
     git clone --recurse-submodules https://github.com/dimag0g/flycfg && cd flycfg
-    lazbuild --build-mode="Release" flycfg.lpi
+    lazbuild --build-mode="Release" TLazSerial/LazSerialPort.lpk flycfg.lpi
 
 Before a release or a pull request, it's advised to run tests:
 
@@ -43,5 +43,6 @@ If you have an FC board, having it connected during a test run allow to test rea
 Licenses
 ---
 
-The software itself is licensed under GPL v.3, see LICENSE. 
+The software itself is licensed under GPL v.3, see LICENSE. The source code is available at https://github.com/dimag0g/flycfg
+
 The bee icon is free for non-commerical use with attribution, see: https://www.vecteezy.com/vector-art/596994-bee-logo-and-symbol-vector-templates
