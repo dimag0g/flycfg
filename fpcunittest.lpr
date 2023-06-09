@@ -8,6 +8,7 @@ uses
 {$R *.res}
 
 begin
+  Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TGuiTestRunner, TestRunner);
   Application.CreateForm(TForm1, Form1);

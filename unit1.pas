@@ -14,33 +14,51 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    ActCfgList: TListBox;
+    ActiveRcList: TListBox;
     AutoComleteList: TListBox;
     BeeperList: TCheckListBox;
-    ActCfgList: TListBox;
+    BeeperRcList: TListBox;
+    BeeperTab: TTabSheet;
     CurCfgGroup: TGroupBox;
+    DebugTab: TTabSheet;
+    DetailsTab: TPageControl;
+    DiffCfgList: TListBox;
+    FeatureRcList: TListBox;
+    FeaturesList: TCheckListBox;
+    FeaturesTab: TTabSheet;
     FileNameEdit: TEdit;
-    Label3: TLabel;
-    LazSerial1: TLazSerial;
-    LogClearButton: TButton;
     FixFeaturesList: TListBox;
-    Label21: TLabel;
+    FcPortGroup: TGroupBox;
+    CfgFileGroup: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
     Label23: TLabel;
     Label24: TLabel;
     Label25: TLabel;
     Label26: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     Label8: TLabel;
+    LazSerial1: TLazSerial;
+    Label21: TLabel;
+    LogClearButton: TButton;
     LogList: TListBox;
+    LogTab: TTabSheet;
     MenuWriteCustom: TMenuItem;
     MenuWriteValid: TMenuItem;
     MenuWriteLine: TMenuItem;
     MenuWriteUnsaved: TMenuItem;
     MenuWriteAll: TMenuItem;
-    WriteMenu: TPopupMenu;
-    StatusLabel: TLabel;
+    LegendPanel: TPanel;
     ProgressBar: TProgressBar;
-    SerialRcList: TListBox;
     SerialBaudBox: TComboBox;
     SerialFnBox: TComboBox;
+    SerialList: TListBox;
+    SerialRcList: TListBox;
+    SerialTab: TTabSheet;
+    StatusLabel: TLabel;
+    WriteMenu: TPopupMenu;
     FindButton: TButton;
     FindBox: TComboBox;
     CurCfgList: TListBox;
@@ -51,30 +69,12 @@ type
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    BeeperRcList: TListBox;
-    SerialList: TListBox;
-    Label4: TLabel;
-    FeatureRcList: TListBox;
-    FeaturesList: TCheckListBox;
-    Label1: TLabel;
-    ActiveRcList: TListBox;
-    Label2: TLabel;
-    Label5: TLabel;
-    DiffCfgList: TListBox;
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
-    BeeperTab: TTabSheet;
-    SerialTab: TTabSheet;
-    DebugTab: TTabSheet;
-    LogTab: TTabSheet;
     UartWriteBtn: TButton;
     UartReadBtn: TButton;
     LoadDefaultBtn: TButton;
     UartCombo: TComboBox;
-    DetailsTab: TPageControl;
-    FeaturesTab: TTabSheet;
     procedure BeeperListClickCheck(Sender: TObject);
     procedure BeeperListSelectionChange(Sender: TObject; User: boolean);
     procedure CfgListClick(Sender: TObject);
@@ -109,7 +109,6 @@ type
     procedure UartWriteBtnClick(Sender: TObject);
   private
     Serial: TBlockSerial;
-    Config: TMemIniFile;
 
     // Proportional resize variables
     FormWidth: Integer;
@@ -125,6 +124,7 @@ type
     function UartConnect(): Boolean;
     procedure GetRcByFeature(feature: String; RcList: TStrings);
   public
+    Config: TMemIniFile;
 
   end;
 
@@ -199,6 +199,8 @@ begin
   DetailsTab.Width := TabWidth + ExtraWidth;
   DetailsTab.Left := TabLeft + ExtraWidth;
   CurCfgGroup.Width := GroupWidth + ExtraWidth;
+  FcPortGroup.Width := GroupWidth + ExtraWidth;
+  CfgFileGroup.Width := GroupWidth + ExtraWidth;
 end;
 
 procedure TForm1.CurCfgShowLine(s: String);

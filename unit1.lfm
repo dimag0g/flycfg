@@ -1253,6 +1253,125 @@ object Form1: TForm1
   OnResize = FormResize
   ShowHint = True
   LCLVersion = '2.2.6.0'
+  object CurCfgGroup: TGroupBox
+    Left = 4
+    Height = 304
+    Top = 112
+    Width = 352
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'Current config'
+    ClientHeight = 284
+    ClientWidth = 348
+    TabOrder = 0
+    object FindBox: TComboBox
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 272
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 15
+      OnEditingDone = FindButtonClick
+      TabOrder = 0
+      Text = '<search>'
+    end
+    object FindButton: TButton
+      Left = 280
+      Height = 30
+      Top = 0
+      Width = 64
+      Anchors = [akTop, akRight]
+      Caption = 'Find'
+      OnClick = FindButtonClick
+      TabOrder = 1
+    end
+    object CurCfgList: TListBox
+      Left = 0
+      Height = 225
+      Top = 32
+      Width = 344
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      ItemHeight = 0
+      MultiSelect = True
+      OnClick = CurCfgListClick
+      OnDblClick = CurCfgListDblClick
+      OnDrawItem = CfgListDrawItem
+      OnSelectionChange = CurCfgListSelectionChange
+      Style = lbOwnerDrawFixed
+      TabOrder = 2
+    end
+    object LegendPanel: TPanel
+      Left = 0
+      Height = 24
+      Top = 260
+      Width = 348
+      Anchors = [akLeft, akRight, akBottom]
+      BevelOuter = bvNone
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 6
+      ClientHeight = 24
+      ClientWidth = 348
+      TabOrder = 3
+      object Label12: TLabel
+        Left = 0
+        Height = 15
+        Top = 0
+        Width = 60
+        Caption = 'Legend:'
+        Font.Style = [fsUnderline]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label16: TLabel
+        Left = 60
+        Height = 15
+        Top = 0
+        Width = 53
+        Caption = 'Invalid'
+        Font.Color = clRed
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label21: TLabel
+        Left = 113
+        Height = 15
+        Top = 0
+        Width = 63
+        Caption = 'Unsaved'
+        Font.Color = clBlue
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label15: TLabel
+        Left = 176
+        Height = 15
+        Top = 0
+        Width = 60
+        Caption = 'Custom'
+        Font.Color = clGreen
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label14: TLabel
+        Left = 236
+        Height = 15
+        Top = 0
+        Width = 59
+        Caption = 'Inactive'
+        Font.Color = clGray
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label13: TLabel
+        Left = 295
+        Height = 15
+        Top = 0
+        Width = 53
+        Caption = 'Default'
+        ParentColor = False
+      end
+    end
+  end
   object DetailsTab: TPageControl
     Left = 360
     Height = 409
@@ -1262,7 +1381,7 @@ object Form1: TForm1
     Anchors = [akTop, akLeft, akBottom]
     MultiLine = True
     TabIndex = 0
-    TabOrder = 0
+    TabOrder = 1
     Options = [nboMultiLine]
     object FeaturesTab: TTabSheet
       Caption = 'Features'
@@ -1270,10 +1389,14 @@ object Form1: TForm1
       ClientWidth = 416
       OnEnter = FeaturesTabEnter
       object Label1: TLabel
+        AnchorSideLeft.Control = FeaturesList
+        AnchorSideRight.Control = FeaturesList
+        AnchorSideRight.Side = asrBottom
         Left = 8
         Height = 15
         Top = 172
-        Width = 103
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Selectable Features:'
         ParentColor = False
       end
@@ -1289,10 +1412,14 @@ object Form1: TForm1
         TabOrder = 0
       end
       object Label2: TLabel
+        AnchorSideLeft.Control = FeatureRcList
+        AnchorSideRight.Control = FeatureRcList
+        AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15
         Top = 4
-        Width = 141
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Feature resources/settings:'
         ParentColor = False
       end
@@ -1321,10 +1448,14 @@ object Form1: TForm1
         TabOrder = 2
       end
       object Label8: TLabel
+        AnchorSideLeft.Control = FixFeaturesList
+        AnchorSideRight.Control = FixFeaturesList
+        AnchorSideRight.Side = asrBottom
         Left = 8
         Height = 15
         Top = 4
-        Width = 79
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Static Features:'
         ParentColor = False
       end
@@ -1346,18 +1477,26 @@ object Form1: TForm1
         TabOrder = 0
       end
       object Label4: TLabel
+        AnchorSideLeft.Control = BeeperList
+        AnchorSideRight.Control = BeeperList
+        AnchorSideRight.Side = asrBottom
         Left = 8
         Height = 15
         Top = 4
-        Width = 77
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Beeper alarms:'
         ParentColor = False
       end
       object Label5: TLabel
+        AnchorSideLeft.Control = BeeperRcList
+        AnchorSideRight.Control = BeeperRcList
+        AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15
         Top = 4
-        Width = 138
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Beeper resources/settings:'
         ParentColor = False
       end
@@ -1394,7 +1533,7 @@ object Form1: TForm1
         Left = 208
         Height = 23
         Top = 160
-        Width = 184
+        Width = 200
         Anchors = [akTop, akLeft, akRight]
         ItemHeight = 15
         ItemIndex = 0
@@ -1410,25 +1549,33 @@ object Form1: TForm1
         Left = 208
         Height = 23
         Top = 216
-        Width = 100
+        Width = 200
         ItemHeight = 15
         OnChange = SerialBaudBoxChange
         TabOrder = 2
         Text = 'NONE'
       end
       object Label23: TLabel
+        AnchorSideLeft.Control = SerialFnBox
+        AnchorSideRight.Control = SerialFnBox
+        AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15
         Top = 140
-        Width = 50
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Function:'
         ParentColor = False
       end
       object Label24: TLabel
+        AnchorSideLeft.Control = SerialBaudBox
+        AnchorSideRight.Control = SerialBaudBox
+        AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15
         Top = 196
-        Width = 50
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Baudrate:'
         ParentColor = False
       end
@@ -1446,18 +1593,26 @@ object Form1: TForm1
         TabOrder = 3
       end
       object Label25: TLabel
+        AnchorSideLeft.Control = SerialList
+        AnchorSideRight.Control = SerialList
+        AnchorSideRight.Side = asrBottom
         Left = 8
         Height = 15
         Top = 4
-        Width = 61
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Serial ports:'
         ParentColor = False
       end
       object Label26: TLabel
+        AnchorSideLeft.Control = SerialRcList
+        AnchorSideRight.Control = SerialRcList
+        AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15
         Top = 4
-        Width = 84
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
         Caption = 'Serial resources:'
         ParentColor = False
       end
@@ -1520,10 +1675,10 @@ object Form1: TForm1
         TabOrder = 0
       end
       object LogClearButton: TButton
-        Left = 338
+        Left = 312
         Height = 25
         Top = 353
-        Width = 75
+        Width = 101
         Anchors = [akRight, akBottom]
         Caption = 'Clear'
         OnClick = LogClearButtonClick
@@ -1535,245 +1690,130 @@ object Form1: TForm1
     Left = 8
     Height = 23
     Top = 425
-    Width = 216
+    Width = 200
     Anchors = [akLeft, akBottom]
-    TabOrder = 1
+    TabOrder = 2
   end
   object StatusLabel: TLabel
-    Left = 232
-    Height = 23
-    Top = 425
-    Width = 549
+    Left = 216
+    Height = 20
+    Top = 428
+    Width = 565
     Anchors = [akLeft, akRight, akBottom]
     AutoSize = False
     Caption = 'Ready'
     ParentColor = False
   end
-  object CurCfgGroup: TGroupBox
+  object FcPortGroup: TGroupBox
     Left = 4
-    Height = 415
-    Top = 1
+    Height = 56
+    Top = 0
     Width = 352
-    Anchors = [akTop, akLeft, akBottom]
-    Caption = 'Current config'
-    ClientHeight = 395
+    Caption = 'Flight Controller'
+    ClientHeight = 36
     ClientWidth = 348
-    TabOrder = 2
-    object Label7: TLabel
-      Left = 0
-      Height = 15
-      Top = 12
-      Width = 42
-      Caption = 'FC Port:'
-      ParentColor = False
-    end
+    TabOrder = 3
     object UartCombo: TComboBox
-      Left = 56
+      Left = 0
       Height = 23
-      Top = 8
-      Width = 120
+      Top = 0
+      Width = 128
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
       OnClick = UartComboClick
       TabOrder = 0
-      Text = 'No serial'
+      Text = 'No device'
     end
     object UartReadBtn: TButton
-      Left = 184
-      Height = 25
+      Left = 136
+      Height = 30
       Hint = 'Read the active configuration from the FC'
-      Top = 8
-      Width = 48
+      Top = 0
+      Width = 64
       Anchors = [akTop, akRight]
       Caption = 'Read'
       OnClick = UartReadBtnClick
       TabOrder = 1
     end
     object UartWriteBtn: TButton
-      Left = 240
-      Height = 25
+      Left = 208
+      Height = 30
       Hint = 'Write the current configuration to the FC'
-      Top = 8
-      Width = 48
+      Top = 0
+      Width = 64
       Anchors = [akTop, akRight]
       Caption = 'Write'
       OnClick = UartWriteBtnClick
       TabOrder = 2
     end
     object LoadDefaultBtn: TButton
-      Left = 296
-      Height = 25
+      Left = 280
+      Height = 30
       Hint = 'Reset the FC configration to defaults and read it'
-      Top = 8
-      Width = 48
+      Top = 0
+      Width = 64
       Anchors = [akTop, akRight]
       Caption = 'Reset'
       OnClick = LoadDefaultBtnClick
       TabOrder = 3
     end
+  end
+  object CfgFileGroup: TGroupBox
+    Left = 4
+    Height = 57
+    Top = 56
+    Width = 352
+    Caption = 'Configuration File'
+    ClientHeight = 37
+    ClientWidth = 348
+    TabOrder = 4
+    object FileNameEdit: TEdit
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 200
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+    end
     object FileReadBtn: TButton
-      Left = 240
-      Height = 25
+      Left = 208
+      Height = 30
       Hint = 'Load the current configuration from a file'
-      Top = 48
-      Width = 48
+      Top = 0
+      Width = 64
       Anchors = [akTop, akRight]
       Caption = 'Load'
       OnClick = FileReadBtnClick
-      TabOrder = 4
+      TabOrder = 1
     end
     object FileWriteBtn: TButton
-      Left = 296
-      Height = 25
+      Left = 280
+      Height = 30
       Hint = 'Write the current configuration to a file'
-      Top = 48
-      Width = 48
+      Top = 0
+      Width = 64
       Anchors = [akTop, akRight]
       Caption = 'Save'
       OnClick = FileWriteBtnClick
-      TabOrder = 5
-    end
-    object Label6: TLabel
-      Left = 0
-      Height = 15
-      Top = 98
-      Width = 80
-      Caption = 'Current config:'
-      ParentColor = False
-    end
-    object FindBox: TComboBox
-      Left = 144
-      Height = 23
-      Top = 88
-      Width = 145
-      Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 15
-      OnEditingDone = FindButtonClick
-      TabOrder = 6
-      Text = '<search>'
-    end
-    object FindButton: TButton
-      Left = 296
-      Height = 24
-      Top = 88
-      Width = 48
-      Anchors = [akTop, akRight]
-      Caption = 'Find'
-      OnClick = FindButtonClick
-      TabOrder = 7
-    end
-    object CurCfgList: TListBox
-      Left = 0
-      Height = 248
-      Top = 120
-      Width = 344
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      ItemHeight = 0
-      MultiSelect = True
-      OnClick = CurCfgListClick
-      OnDblClick = CurCfgListDblClick
-      OnDrawItem = CfgListDrawItem
-      OnSelectionChange = CurCfgListSelectionChange
-      Style = lbOwnerDrawFixed
-      TabOrder = 8
-    end
-    object Label12: TLabel
-      Left = 0
-      Height = 15
-      Top = 374
-      Width = 42
-      Anchors = [akLeft, akBottom]
-      Caption = 'Legend:'
-      Font.Style = [fsUnderline]
-      ParentColor = False
-      ParentFont = False
-    end
-    object Label16: TLabel
-      Left = 56
-      Height = 15
-      Top = 374
-      Width = 35
-      Anchors = [akLeft, akBottom]
-      Caption = 'Invalid'
-      Font.Color = clRed
-      ParentColor = False
-      ParentFont = False
-    end
-    object Label21: TLabel
-      Left = 106
-      Height = 15
-      Top = 374
-      Width = 45
-      Anchors = [akLeft, akBottom]
-      Caption = 'Unsaved'
-      Font.Color = clBlue
-      ParentColor = False
-      ParentFont = False
-    end
-    object Label15: TLabel
-      Left = 170
-      Height = 15
-      Top = 374
-      Width = 42
-      Anchors = [akLeft, akBottom]
-      Caption = 'Custom'
-      Font.Color = clGreen
-      ParentColor = False
-      ParentFont = False
-    end
-    object Label14: TLabel
-      Left = 226
-      Height = 15
-      Top = 374
-      Width = 41
-      Anchors = [akLeft, akBottom]
-      Caption = 'Inactive'
-      Font.Color = clGray
-      ParentColor = False
-      ParentFont = False
-    end
-    object Label13: TLabel
-      Left = 282
-      Height = 15
-      Top = 374
-      Width = 38
-      Anchors = [akLeft, akBottom]
-      Caption = 'Default'
-      ParentColor = False
-    end
-    object FileNameEdit: TEdit
-      Left = 72
-      Height = 23
-      Top = 48
-      Width = 160
-      Alignment = taRightJustify
-      Anchors = [akTop, akLeft, akRight]
-      TabOrder = 9
-    end
-    object Label3: TLabel
-      Left = 0
-      Height = 15
-      Top = 50
-      Width = 58
-      Caption = 'Config file:'
-      ParentColor = False
+      TabOrder = 2
     end
   end
   object OpenDialog: TOpenDialog
     Filter = 'Config files|*.cfg|All files|*.*'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    Left = 40
-    Top = 168
+    Left = 56
+    Top = 216
   end
   object SaveDialog: TSaveDialog
     Filter = 'Config files|*.cfg|All files|*.*'
     Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
-    Left = 120
-    Top = 168
+    Left = 160
+    Top = 216
   end
   object WriteMenu: TPopupMenu
-    Left = 200
-    Top = 168
+    Left = 264
+    Top = 216
     object MenuWriteLine: TMenuItem
       Caption = 'Write Selected'
       OnClick = MenuWriteClick
