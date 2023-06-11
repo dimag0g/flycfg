@@ -1,16 +1,17 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: tform1.beepertab.caption
 msgid "Beeper"
@@ -18,7 +19,11 @@ msgstr "Пищалка"
 
 #: tform1.caption
 msgid "FlyCfg"
-msgstr ""
+msgstr "FlyCfg"
+
+#: tform1.cfgfilegroup.caption
+msgid "Configuration File"
+msgstr "Файл конфигурации"
 
 #: tform1.curcfggroup.caption
 msgctxt "tform1.curcfggroup.caption"
@@ -29,13 +34,17 @@ msgstr "Текущая конфигурация"
 msgid "Debug"
 msgstr "Отладка"
 
+#: tform1.fcportgroup.caption
+msgid "Flight Controller"
+msgstr "Контроллер Полёта"
+
 #: tform1.featurestab.caption
 msgid "Features"
 msgstr "Функции"
 
 #: tform1.filereadbtn.caption
 msgid "Load"
-msgstr "Загрузить"
+msgstr "Загрузка"
 
 #: tform1.filereadbtn.hint
 msgid "Load the current configuration from a file"
@@ -43,7 +52,7 @@ msgstr "Загрузка текущей конфигурации из файла
 
 #: tform1.filewritebtn.caption
 msgid "Save"
-msgstr "Сохранить"
+msgstr "Запись"
 
 #: tform1.filewritebtn.hint
 msgid "Write the current configuration to a file"
@@ -83,7 +92,7 @@ msgstr ""
 
 #: tform1.label2.caption
 msgid "Feature resources/settings:"
-msgstr "Ресурсы/параметры функции:"
+msgstr "Ресурсы/параметры:"
 
 #: tform1.label21.caption
 msgid "Unsaved"
@@ -106,8 +115,8 @@ msgid "Serial resources:"
 msgstr "Ресурсы порта:"
 
 #: tform1.label3.caption
-msgid "Config file:"
-msgstr "Файл конфигурации:"
+msgid "Slot:"
+msgstr "Слот:"
 
 #: tform1.label4.caption
 msgid "Beeper alarms:"
@@ -115,28 +124,23 @@ msgstr "Пищалка"
 
 #: tform1.label5.caption
 msgid "Beeper resources/settings:"
-msgstr ""
+msgstr "Ресурсы/настройки:"
 
 #: tform1.label6.caption
-msgctxt "tform1.label6.caption"
-msgid "Current config:"
-msgstr "Текущая конфигурация:"
+msgid "Mode:"
+msgstr "Режим:"
 
 #: tform1.label7.caption
-msgid "FC Port:"
-msgstr "Порт КП:"
+msgid "Channel:"
+msgstr "Канал:"
 
 #: tform1.label8.caption
 msgid "Static Features:"
-msgstr "Фиксированные функции:"
+msgstr "Основные функции:"
 
-#: tform1.loaddefaultbtn.caption
-msgid "Reset"
-msgstr "Сброс"
-
-#: tform1.loaddefaultbtn.hint
-msgid "Reset the FC configration to defaults and read it"
-msgstr "Сбросить конфигурацию FC на значения по умолчанию и загрузить ее"
+#: tform1.label9.caption
+msgid "Range:"
+msgstr "Пределы:"
 
 #: tform1.logclearbutton.caption
 msgid "Clear"
@@ -145,6 +149,10 @@ msgstr "Очистить"
 #: tform1.logtab.caption
 msgid "Log"
 msgstr "Лог"
+
+#: tform1.menureset.caption
+msgid "Reset to Defaults"
+msgstr "Сбросить"
 
 #: tform1.menuwriteall.caption
 msgid "Write All"
@@ -166,6 +174,18 @@ msgstr "Записать несохранённые"
 msgid "Write Valid"
 msgstr "Записать корректные"
 
+#: tform1.modechannelcombo.text
+msgid "Mode Channel"
+msgstr ""
+
+#: tform1.modenamecombo.text
+msgid "Mode Name"
+msgstr ""
+
+#: tform1.modestab.caption
+msgid "Modes"
+msgstr "Режимы"
+
 #: tform1.serialbaudbox.text
 msgctxt "tform1.serialbaudbox.text"
 msgid "NONE"
@@ -181,24 +201,25 @@ msgid "Serial"
 msgstr "Порт"
 
 #: tform1.statuslabel.caption
+msgctxt "tform1.statuslabel.caption"
 msgid "Ready"
 msgstr "Готов"
 
 #: tform1.uartcombo.text
-msgid "No serial"
+msgid "No device"
 msgstr "Нет КП"
 
 #: tform1.uartreadbtn.caption
 msgid "Read"
-msgstr "Читать"
+msgstr "Чтение"
 
 #: tform1.uartreadbtn.hint
 msgid "Read the active configuration from the FC"
 msgstr "Считывание активной конфигурации с КП"
 
 #: tform1.uartwritebtn.caption
-msgid "Write"
-msgstr ""
+msgid "Write..."
+msgstr "Запись..."
 
 #: tform1.uartwritebtn.hint
 msgid "Write the current configuration to the FC"

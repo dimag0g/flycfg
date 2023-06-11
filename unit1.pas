@@ -20,6 +20,12 @@ type
     BeeperList: TCheckListBox;
     BeeperRcList: TListBox;
     BeeperTab: TTabSheet;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    ModeEndTrack: TTrackBar;
+    ModeChannelCombo: TComboBox;
+    ModeNameCombo: TComboBox;
     CurCfgGroup: TGroupBox;
     DebugTab: TTabSheet;
     DetailsTab: TPageControl;
@@ -37,14 +43,17 @@ type
     Label24: TLabel;
     Label25: TLabel;
     Label26: TLabel;
+    Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label8: TLabel;
     LazSerial1: TLazSerial;
     Label21: TLabel;
+    ModesList: TListBox;
     LogClearButton: TButton;
     LogList: TListBox;
     LogTab: TTabSheet;
+    MenuReset: TMenuItem;
     MenuWriteCustom: TMenuItem;
     MenuWriteValid: TMenuItem;
     MenuWriteLine: TMenuItem;
@@ -58,6 +67,8 @@ type
     SerialRcList: TListBox;
     SerialTab: TTabSheet;
     StatusLabel: TLabel;
+    ModesTab: TTabSheet;
+    ModeBeginTrack: TTrackBar;
     WriteMenu: TPopupMenu;
     FindButton: TButton;
     FindBox: TComboBox;
@@ -80,8 +91,6 @@ type
     procedure CfgListClick(Sender: TObject);
     procedure CurCfgListDblClick(Sender: TObject);
     procedure CurCfgListSelectionChange(Sender: TObject; User: boolean);
-    procedure CurToDiffBtnClick(Sender: TObject);
-    procedure DiffToCurBtnClick(Sender: TObject);
     procedure FeaturesListClickCheck(Sender: TObject);
     procedure FeaturesListSelectionChange(Sender: TObject; User: boolean);
     procedure CfgListDrawItem(Control: TWinControl; Index: Integer;
@@ -97,8 +106,10 @@ type
     procedure LogClearButtonClick(Sender: TObject);
     procedure MenuResetClick(Sender: TObject);
     procedure MenuWriteClick(Sender: TObject);
-    procedure SerialBaudBoxChange(Sender: TObject);
-    procedure SerialFnBoxChange(Sender: TObject);
+    procedure ModeChange(Sender: TObject);
+    procedure ModesListSelectionChange(Sender: TObject; User: boolean);
+    procedure ModesTabShow(Sender: TObject);
+    procedure SerialChange(Sender: TObject);
     procedure SerialListSelectionChange(Sender: TObject; User: boolean);
     procedure SerialTabShow(Sender: TObject);
     procedure UartComboClick(Sender: TObject);
@@ -300,7 +311,10 @@ begin
           end;
         end;
       end;
-    end;
+    end else if fields[0] = 'aux' then begin
+      if Length(fields) < 6 then Result := Result or CFG_LINE_BAD_FORMAT
+      else if StrToInt(fields[4]) >= StrToInt(fields[5]) then Result := Result or CFG_LINE_INACTIVE;
+    end
   end;
 end;
 
@@ -368,11 +382,6 @@ begin
   end;
 end;
 
-procedure TForm1.CurToDiffBtnClick(Sender: TObject);
-begin
-  DiffCfgList.Items := CurCfgList.Items;
-end;
-
 procedure TForm1.BeeperTabShow(Sender: TObject);
 var
   s: String;
@@ -382,7 +391,6 @@ var
   i: Integer;
 begin
   BeeperList.Items.Clear;
-  BeeperRcList.Items.Clear;
   BeeperRcList.Items.Clear;
   for s in CurCfgList.Items do begin
     fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
@@ -504,11 +512,6 @@ begin
   CurCfgList.Hint := s;
 end;
 
-procedure TForm1.DiffToCurBtnClick(Sender: TObject);
-begin
-  CurCfgList.Items := DiffCfgList.Items;
-end;
-
 procedure TForm1.CfgListDblClick(Sender: TObject);
 var
   ListBox: TListBox absolute Sender;
@@ -602,7 +605,93 @@ begin
 
 end;
 
-procedure TForm1.SerialBaudBoxChange(Sender: TObject);
+procedure TForm1.ModeChange(Sender: TObject);
+var
+  fields: TStringArray;
+  s: String;
+  i: Integer;
+begin
+  ModeBeginTrack.Position := Round(ModeBeginTrack.Position / 25)*25;
+  ModeEndTrack.Position := Round(ModeEndTrack.Position / 25)*25;
+  ModeBeginTrack.SelStart := ModeBeginTrack.Position;
+  ModeEndTrack.SelStart := ModeBeginTrack.Position;
+  ModeBeginTrack.SelEnd := ModeEndTrack.Position;
+  ModeEndTrack.SelEnd := ModeEndTrack.Position;
+
+  for i := CurCfgList.Items.Count-1 downto 0 do begin
+    s := CurCfgList.Items[i];
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 6 then continue;
+    if fields[0] = 'aux' then begin
+      if fields[1] = ModesList.Items[ModesList.ItemIndex] then begin
+        fields[2] := IntToStr(ModeNameCombo.ItemIndex);
+        fields[3] := IntToStr(ModeChannelCombo.ItemIndex);
+        fields[4] := IntToStr(ModeBeginTrack.Position);
+        fields[5] := IntToStr(ModeEndTrack.Position);
+        CurCfgList.Items[i] := String.Join(' ', fields);
+        CfgLineSts[i] := CfgCalcSts(i);
+        Break;
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.ModesListSelectionChange(Sender: TObject; User: boolean);
+var
+  s: String;
+  i: Integer;
+  fields: TStringArray;
+begin
+  if not User then Exit;
+  if ModesList.ItemIndex < 0 then Exit;
+
+  for i := CurCfgList.Items.Count-1 downto 0 do begin
+    s := CurCfgList.Items[i];
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 6 then continue;
+    if fields[0] = 'aux' then begin
+      if StrToInt(fields[1]) = ModesList.ItemIndex then begin
+        CurCfgList.ItemIndex := i;
+        ModeNameCombo.ItemIndex := StrToInt(fields[2]);
+        ModeChannelCombo.ItemIndex := StrToInt(fields[3]);
+        ModeBeginTrack.Position := StrToInt(fields[4]);
+        ModeEndTrack.Position := StrToInt(fields[5]);
+        Break;
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.ModesTabShow(Sender: TObject);
+var
+  s: String;
+  fields: TStringArray;
+  i: Integer;
+begin
+  ModesList.Items.Clear;
+  for s in CurCfgList.Items do begin
+    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
+    if Length(fields) < 6 then continue;
+    if fields[0] = 'aux' then begin
+        ModesList.Items.Add(fields[1]);
+    end;
+  end;
+
+  fields := Config.ReadString('general', 'MODE_NAMES', 'ARM').Split(',');
+  ModeNameCombo.Items.Clear();
+  for s in fields do begin
+    ModeNameCombo.Items.Add(s);
+  end;
+  ModeNameCombo.ItemIndex := 0;
+
+  ModeChannelCombo.Items.Clear();
+  for i := 1 to 15 do begin
+    ModeChannelCombo.Items.Add('AUX'+IntToStr(i));
+  end;
+  ModeChannelCombo.ItemIndex := 0;
+end;
+
+procedure TForm1.SerialChange(Sender: TObject);
 var
   s: String;
   i: Integer;
@@ -622,42 +711,16 @@ begin
     if fields[0] = 'serial' then begin
       if StrToInt(fields[1]) = port-1 then begin
         CurCfgList.ItemIndex := i;
-        portFnId := StrToInt(fields[2]);
-        if portFnId > 2 then portFnId := Trunc(Log2(portFnId+1))+1;
-        portFunction := SerialFnBox.Items[SerialFnBox.ItemIndex];
-        if Pos('MSP', portFunction) = 1 then fields[3] := SerialBaudBox.Text
-        else if Pos('GPS', portFunction) = 1 then fields[4] := SerialBaudBox.Text
-        else if Pos('TELEMETRY', portFunction) = 1 then fields[5] := SerialBaudBox.Text
-        else if Pos('BLACKBOX', portFunction) = 1 then fields[6] := SerialBaudBox.Text;
-        CurCfgList.Items[i] := String.Join(' ', fields);
-        CfgLineSts[i] := CfgCalcSts(i);
-      end;
-    end;
-  end;
-end;
-
-procedure TForm1.SerialFnBoxChange(Sender: TObject);
-var
-  s: String;
-  i: Integer;
-  fields: TStringArray;
-  port: Integer;
-  portFnId: Integer;
-begin
-  if SerialList.ItemIndex < 0 then Exit;
-
-  port := StrToInt(SerialList.Items[SerialList.ItemIndex]);
-
-  for i := CurCfgList.Items.Count-1 downto 0 do begin
-    s := CurCfgList.Items[i];
-    fields := s.Split(' ', TStringSplitOptions.ExcludeEmpty);
-    if Length(fields) < 7 then continue;
-    if fields[0] = 'serial' then begin
-      if StrToInt(fields[1]) = port-1 then begin
-        CurCfgList.ItemIndex := i;
         portFnId := SerialFnBox.ItemIndex;
         if portFnId > 2 then portFnId := Round(IntPower(2, portFnId-1));
         fields[2] := IntToStr(portFnId);
+        portFunction := SerialFnBox.Items[SerialFnBox.ItemIndex];
+        if SerialBaudBox.Text <> 'NONE' then begin;
+          if Pos('MSP', portFunction) = 1 then fields[3] := SerialBaudBox.Text
+          else if Pos('GPS', portFunction) = 1 then fields[4] := SerialBaudBox.Text
+          else if Pos('TELEMETRY', portFunction) = 1 then fields[5] := SerialBaudBox.Text
+          else if Pos('BLACKBOX', portFunction) = 1 then fields[6] := SerialBaudBox.Text;
+        end;
         CurCfgList.Items[i] := String.Join(' ', fields);
         CfgLineSts[i] := CfgCalcSts(i);
       end;
@@ -986,6 +1049,8 @@ var
 begin
   s := GetSerialPortNames;
   ports := s.Split(', ', TStringSplitOptions.ExcludeEmpty);
+
+  UartCombo.Text := '';
 
   for index := 0 to Length(ports)-1 do begin
     if UartCombo.Items.Count <> Length(ports) then begin

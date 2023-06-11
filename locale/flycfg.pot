@@ -9,6 +9,10 @@ msgstr ""
 msgid "FlyCfg"
 msgstr ""
 
+#: tform1.cfgfilegroup.caption
+msgid "Configuration File"
+msgstr ""
+
 #: tform1.curcfggroup.caption
 msgctxt "tform1.curcfggroup.caption"
 msgid "Current config"
@@ -16,6 +20,10 @@ msgstr ""
 
 #: tform1.debugtab.caption
 msgid "Debug"
+msgstr ""
+
+#: tform1.fcportgroup.caption
+msgid "Flight Controller"
 msgstr ""
 
 #: tform1.featurestab.caption
@@ -95,7 +103,7 @@ msgid "Serial resources:"
 msgstr ""
 
 #: tform1.label3.caption
-msgid "Config file:"
+msgid "Slot:"
 msgstr ""
 
 #: tform1.label4.caption
@@ -107,24 +115,19 @@ msgid "Beeper resources/settings:"
 msgstr ""
 
 #: tform1.label6.caption
-msgctxt "tform1.label6.caption"
-msgid "Current config:"
+msgid "Mode:"
 msgstr ""
 
 #: tform1.label7.caption
-msgid "FC Port:"
+msgid "Channel:"
 msgstr ""
 
 #: tform1.label8.caption
 msgid "Static Features:"
 msgstr ""
 
-#: tform1.loaddefaultbtn.caption
-msgid "Reset"
-msgstr ""
-
-#: tform1.loaddefaultbtn.hint
-msgid "Reset the FC configration to defaults and read it"
+#: tform1.label9.caption
+msgid "Range:"
 msgstr ""
 
 #: tform1.logclearbutton.caption
@@ -133,6 +136,10 @@ msgstr ""
 
 #: tform1.logtab.caption
 msgid "Log"
+msgstr ""
+
+#: tform1.menureset.caption
+msgid "Reset to Defaults"
 msgstr ""
 
 #: tform1.menuwriteall.caption
@@ -155,6 +162,18 @@ msgstr ""
 msgid "Write Valid"
 msgstr ""
 
+#: tform1.modechannelcombo.text
+msgid "Mode Channel"
+msgstr ""
+
+#: tform1.modenamecombo.text
+msgid "Mode Name"
+msgstr ""
+
+#: tform1.modestab.caption
+msgid "Modes"
+msgstr ""
+
 #: tform1.serialbaudbox.text
 msgctxt "tform1.serialbaudbox.text"
 msgid "NONE"
@@ -170,11 +189,12 @@ msgid "Serial"
 msgstr ""
 
 #: tform1.statuslabel.caption
+msgctxt "tform1.statuslabel.caption"
 msgid "Ready"
 msgstr ""
 
 #: tform1.uartcombo.text
-msgid "No serial"
+msgid "No device"
 msgstr ""
 
 #: tform1.uartreadbtn.caption
@@ -186,7 +206,7 @@ msgid "Read the active configuration from the FC"
 msgstr ""
 
 #: tform1.uartwritebtn.caption
-msgid "Write"
+msgid "Write..."
 msgstr ""
 
 #: tform1.uartwritebtn.hint

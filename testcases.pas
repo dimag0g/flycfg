@@ -20,6 +20,7 @@ type
     procedure TestFeaturesTab;
     procedure TestBeeperTab;
     procedure TestSerialTab;
+    procedure TestModesTab;
     procedure TestCtrlSizesRu;
     procedure TestCtrlSizesEn;
   end;
@@ -34,8 +35,9 @@ begin
   if Form1.CurCfgList.Items.Count > 0 then begin
    Form1.CurCfgList.ItemIndex := 0;
    Form1.CurCfgList.OnSelectionChange(nil, True);
-  end
-  //Form1.UartWriteBtn.OnClick(nil);
+  end;
+  Form1.UartCombo.Text := '';
+  Form1.MenuWriteAll.OnClick(nil);
 end;
 
 procedure TTestCase1.TestReadWriteFile;
@@ -49,6 +51,10 @@ begin
   Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   Form1.CurCfgList.ItemIndex := 0;
   Form1.CurCfgList.OnSelectionChange(nil, True);
+
+  Form1.FindBox.Text := 'resource';
+  Form1.FindButton.OnClick(nil);
+  Check(Pos('resource', Form1.CurCfgList.Items[Form1.CurCfgList.ItemIndex]) > 0, 'resource line not selected');
 
   // Save test file
   Form1.FileNameEdit.Text := '';
@@ -65,6 +71,9 @@ begin
 
   Form1.DetailsTab.ActivePage := Form1.FeaturesTab;
   Form1.FeaturesTab.OnShow(nil);
+  Check(Form1.FixFeaturesList.Items.IndexOf('ADC') >= 0, 'ADC feature not found');
+  Form1.FixFeaturesList.ItemIndex := Form1.FixFeaturesList.Items.IndexOf('ADC');
+  Form1.FixFeaturesList.OnSelectionChange(nil, True);
   Check(Form1.FeaturesList.Items.IndexOf('RX_SERIAL') >= 0, 'RX_SERIAL feature not found');
   Form1.FeaturesList.ItemIndex := Form1.FeaturesList.Items.IndexOf('RX_SERIAL');
   Form1.FeaturesList.OnSelectionChange(nil, True);
@@ -119,6 +128,24 @@ begin
   Form1.SerialBaudBox.OnChange(nil);
 end;
 
+procedure TTestCase1.TestModesTab;
+begin
+  if Form1.CurCfgList.Items.Count = 0 then begin
+   Form1.OpenDialog.Filename := ExtractFilePath(Application.ExeName) + DirectorySeparator + 'test.cfg';
+   Form1.FileReadBtn.OnClick(nil);
+   Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
+  end;
+
+  Form1.ModesTab.OnShow(nil);
+  Check(Form1.ModesList.Items.Count > 0, 'modes not loaded');
+  Form1.ModesList.ItemIndex := 0;
+  Form1.ModesList.OnSelectionChange(nil, True);
+  Check(Pos('aux', Form1.CurCfgList.Items[Form1.CurCfgList.ItemIndex]) > 0, 'serial line not selected');
+  Check(Form1.ModeNameCombo.Items.IndexOf('ARM') >= 0, 'ARM mode not found');
+  Form1.ModeNameCombo.ItemIndex := Form1.ModeNameCombo.Items.IndexOf('ARM');
+  Form1.ModeNameCombo.OnChange(nil);
+end;
+
 function TestCtrlSizes: String;
 var
   i: Integer;
@@ -165,7 +192,8 @@ end;
 
 procedure TTestCase1.SetUp;
 begin
-  {$IFDEF UNIX}  Form1.Config.Destroy;
+  {$IFDEF UNIX}
+  Form1.Config.Destroy;
   Form1.Config := TMemIniFile.Create(ExtractFilePath(Application.ExeName) + 'flycfg.ini');
   {$ENDIF}
   Form1.Show;

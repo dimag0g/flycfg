@@ -1254,20 +1254,20 @@ object Form1: TForm1
   ShowHint = True
   LCLVersion = '2.2.6.0'
   object CurCfgGroup: TGroupBox
-    Left = 4
+    Left = 2
     Height = 304
     Top = 112
-    Width = 352
+    Width = 354
     Anchors = [akTop, akLeft, akBottom]
     Caption = 'Current config'
     ClientHeight = 284
-    ClientWidth = 348
+    ClientWidth = 350
     TabOrder = 0
     object FindBox: TComboBox
       Left = 0
       Height = 23
       Top = 0
-      Width = 256
+      Width = 258
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
       OnEditingDone = FindButtonClick
@@ -1278,7 +1278,7 @@ object Form1: TForm1
       Left = 264
       Height = 30
       Top = 0
-      Width = 80
+      Width = 82
       Anchors = [akTop, akRight]
       Caption = 'Find'
       OnClick = FindButtonClick
@@ -1288,7 +1288,7 @@ object Form1: TForm1
       Left = 0
       Height = 225
       Top = 32
-      Width = 344
+      Width = 345
       Anchors = [akTop, akLeft, akRight, akBottom]
       ItemHeight = 0
       MultiSelect = True
@@ -1302,14 +1302,14 @@ object Form1: TForm1
       Left = 0
       Height = 24
       Top = 260
-      Width = 348
+      Width = 350
       Anchors = [akLeft, akRight, akBottom]
       BevelOuter = bvNone
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
       ClientHeight = 24
-      ClientWidth = 348
+      ClientWidth = 350
       TabOrder = 3
       object Label12: TLabel
         Left = 0
@@ -1365,7 +1365,7 @@ object Form1: TForm1
         Left = 295
         Height = 15
         Top = 0
-        Width = 53
+        Width = 55
         Caption = 'Default'
         ParentColor = False
       end
@@ -1373,8 +1373,8 @@ object Form1: TForm1
   end
   object DetailsTab: TPageControl
     Left = 360
-    Height = 409
-    Top = 7
+    Height = 411
+    Top = 5
     Width = 424
     ActivePage = BeeperTab
     Anchors = [akTop, akLeft, akBottom]
@@ -1384,7 +1384,7 @@ object Form1: TForm1
     Options = [nboMultiLine]
     object FeaturesTab: TTabSheet
       Caption = 'Features'
-      ClientHeight = 381
+      ClientHeight = 383
       ClientWidth = 416
       OnShow = FeaturesTabShow
       object Label1: TLabel
@@ -1401,7 +1401,7 @@ object Form1: TForm1
       end
       object FeaturesList: TCheckListBox
         Left = 8
-        Height = 185
+        Height = 186
         Top = 192
         Width = 192
         Anchors = [akTop, akLeft, akBottom]
@@ -1424,7 +1424,7 @@ object Form1: TForm1
       end
       object FeatureRcList: TListBox
         Left = 208
-        Height = 352
+        Height = 354
         Top = 24
         Width = 200
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1461,12 +1461,12 @@ object Form1: TForm1
     end
     object BeeperTab: TTabSheet
       Caption = 'Beeper'
-      ClientHeight = 381
+      ClientHeight = 383
       ClientWidth = 416
       OnShow = BeeperTabShow
       object BeeperList: TCheckListBox
         Left = 8
-        Height = 352
+        Height = 354
         Top = 24
         Width = 192
         Anchors = [akTop, akLeft, akBottom]
@@ -1501,7 +1501,7 @@ object Form1: TForm1
       end
       object BeeperRcList: TListBox
         Left = 208
-        Height = 352
+        Height = 354
         Top = 24
         Width = 200
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1515,12 +1515,12 @@ object Form1: TForm1
     end
     object SerialTab: TTabSheet
       Caption = 'Serial'
-      ClientHeight = 381
+      ClientHeight = 383
       ClientWidth = 416
       OnShow = SerialTabShow
       object SerialList: TListBox
         Left = 8
-        Height = 352
+        Height = 354
         Top = 24
         Width = 192
         Anchors = [akTop, akLeft, akBottom]
@@ -1539,7 +1539,7 @@ object Form1: TForm1
         Items.Strings = (
           'NONE'
         )
-        OnChange = SerialFnBoxChange
+        OnChange = SerialChange
         Style = csDropDownList
         TabOrder = 1
         Text = 'NONE'
@@ -1550,7 +1550,7 @@ object Form1: TForm1
         Top = 216
         Width = 200
         ItemHeight = 15
-        OnChange = SerialBaudBoxChange
+        OnChange = SerialChange
         TabOrder = 2
         Text = 'NONE'
       end
@@ -1616,9 +1616,115 @@ object Form1: TForm1
         ParentColor = False
       end
     end
+    object ModesTab: TTabSheet
+      Caption = 'Modes'
+      ClientHeight = 383
+      ClientWidth = 416
+      OnShow = ModesTabShow
+      object ModesList: TListBox
+        Left = 8
+        Height = 354
+        Top = 24
+        Width = 192
+        Anchors = [akTop, akLeft, akBottom]
+        ItemHeight = 0
+        OnSelectionChange = ModesListSelectionChange
+        TabOrder = 0
+      end
+      object Label3: TLabel
+        AnchorSideRight.Control = ModesList
+        AnchorSideRight.Side = asrBottom
+        Left = 8
+        Height = 15
+        Top = 4
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'Slot:'
+        ParentColor = False
+      end
+      object ModeChannelCombo: TComboBox
+        Left = 208
+        Height = 23
+        Top = 80
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 15
+        OnChange = ModeChange
+        TabOrder = 1
+        Text = 'Mode Channel'
+      end
+      object ModeNameCombo: TComboBox
+        Left = 208
+        Height = 23
+        Top = 24
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 15
+        OnChange = ModeChange
+        TabOrder = 2
+        Text = 'Mode Name'
+      end
+      object ModeBeginTrack: TTrackBar
+        Left = 208
+        Height = 25
+        Top = 136
+        Width = 200
+        Frequency = 25
+        Max = 2100
+        Min = 900
+        OnChange = ModeChange
+        Position = 900
+        TabOrder = 3
+      end
+      object ModeEndTrack: TTrackBar
+        Left = 208
+        Height = 25
+        Top = 176
+        Width = 200
+        Frequency = 25
+        Max = 2100
+        Min = 900
+        OnChange = ModeChange
+        Position = 900
+        TabOrder = 4
+      end
+      object Label6: TLabel
+        AnchorSideRight.Control = ModeNameCombo
+        AnchorSideRight.Side = asrBottom
+        Left = 208
+        Height = 15
+        Top = 4
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'Mode:'
+        ParentColor = False
+      end
+      object Label7: TLabel
+        AnchorSideRight.Control = ModeChannelCombo
+        AnchorSideRight.Side = asrBottom
+        Left = 208
+        Height = 15
+        Top = 60
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'Channel:'
+        ParentColor = False
+      end
+      object Label9: TLabel
+        AnchorSideRight.Control = ModeBeginTrack
+        AnchorSideRight.Side = asrBottom
+        Left = 208
+        Height = 15
+        Top = 116
+        Width = 200
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'Range:'
+        ParentColor = False
+      end
+    end
     object DebugTab: TTabSheet
       Caption = 'Debug'
-      ClientHeight = 381
+      ClientHeight = 383
       ClientWidth = 416
       TabVisible = False
       object DiffCfgList: TListBox
@@ -1641,7 +1747,7 @@ object Form1: TForm1
       end
       object ActiveRcList: TListBox
         Left = 8
-        Height = 169
+        Height = 171
         Top = 200
         Width = 216
         Anchors = [akTop, akLeft, akBottom]
@@ -1650,7 +1756,7 @@ object Form1: TForm1
       end
       object AutoComleteList: TListBox
         Left = 232
-        Height = 169
+        Height = 171
         Top = 200
         Width = 176
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1661,12 +1767,12 @@ object Form1: TForm1
     end
     object LogTab: TTabSheet
       Caption = 'Log'
-      ClientHeight = 381
+      ClientHeight = 383
       ClientWidth = 416
       TabVisible = False
       object LogList: TListBox
         Left = 8
-        Height = 340
+        Height = 342
         Top = 8
         Width = 405
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1676,7 +1782,7 @@ object Form1: TForm1
       object LogClearButton: TButton
         Left = 312
         Height = 30
-        Top = 352
+        Top = 354
         Width = 101
         Anchors = [akRight, akBottom]
         Caption = 'Clear'
@@ -1704,13 +1810,13 @@ object Form1: TForm1
     ParentColor = False
   end
   object FcPortGroup: TGroupBox
-    Left = 4
+    Left = 2
     Height = 56
     Top = 0
-    Width = 352
+    Width = 354
     Caption = 'Flight Controller'
     ClientHeight = 36
-    ClientWidth = 348
+    ClientWidth = 350
     TabOrder = 3
     object UartCombo: TComboBox
       Left = 0
@@ -1728,7 +1834,7 @@ object Form1: TForm1
       Height = 30
       Hint = 'Read the active configuration from the FC'
       Top = 0
-      Width = 80
+      Width = 82
       Anchors = [akTop, akRight]
       Caption = 'Read'
       OnClick = UartReadBtnClick
@@ -1739,7 +1845,7 @@ object Form1: TForm1
       Height = 30
       Hint = 'Write the current configuration to the FC'
       Top = 0
-      Width = 80
+      Width = 82
       Anchors = [akTop, akRight]
       Caption = 'Write...'
       OnClick = UartWriteBtnClick
@@ -1747,13 +1853,13 @@ object Form1: TForm1
     end
   end
   object CfgFileGroup: TGroupBox
-    Left = 4
+    Left = 2
     Height = 57
     Top = 56
-    Width = 352
+    Width = 354
     Caption = 'Configuration File'
     ClientHeight = 37
-    ClientWidth = 348
+    ClientWidth = 350
     TabOrder = 4
     object FileNameEdit: TEdit
       Left = 0
@@ -1769,7 +1875,7 @@ object Form1: TForm1
       Height = 30
       Hint = 'Load the current configuration from a file'
       Top = 0
-      Width = 80
+      Width = 82
       Anchors = [akTop, akRight]
       Caption = 'Load'
       OnClick = FileReadBtnClick
@@ -1780,7 +1886,7 @@ object Form1: TForm1
       Height = 30
       Hint = 'Write the current configuration to a file'
       Top = 0
-      Width = 80
+      Width = 82
       Anchors = [akTop, akRight]
       Caption = 'Save'
       OnClick = FileWriteBtnClick
