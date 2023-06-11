@@ -1267,7 +1267,7 @@ object Form1: TForm1
       Left = 0
       Height = 23
       Top = 0
-      Width = 272
+      Width = 256
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
       OnEditingDone = FindButtonClick
@@ -1275,10 +1275,10 @@ object Form1: TForm1
       Text = '<search>'
     end
     object FindButton: TButton
-      Left = 280
+      Left = 264
       Height = 30
       Top = 0
-      Width = 64
+      Width = 80
       Anchors = [akTop, akRight]
       Caption = 'Find'
       OnClick = FindButtonClick
@@ -1292,11 +1292,10 @@ object Form1: TForm1
       Anchors = [akTop, akLeft, akRight, akBottom]
       ItemHeight = 0
       MultiSelect = True
-      OnClick = CurCfgListClick
       OnDblClick = CurCfgListDblClick
       OnDrawItem = CfgListDrawItem
       OnSelectionChange = CurCfgListSelectionChange
-      Style = lbOwnerDrawFixed
+      Style = lbOwnerDrawVariable
       TabOrder = 2
     end
     object LegendPanel: TPanel
@@ -1377,17 +1376,17 @@ object Form1: TForm1
     Height = 409
     Top = 7
     Width = 424
-    ActivePage = FeaturesTab
+    ActivePage = BeeperTab
     Anchors = [akTop, akLeft, akBottom]
     MultiLine = True
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 1
     Options = [nboMultiLine]
     object FeaturesTab: TTabSheet
       Caption = 'Features'
       ClientHeight = 381
       ClientWidth = 416
-      OnEnter = FeaturesTabEnter
+      OnShow = FeaturesTabShow
       object Label1: TLabel
         AnchorSideLeft.Control = FeaturesList
         AnchorSideRight.Control = FeaturesList
@@ -1433,7 +1432,7 @@ object Form1: TForm1
         OnClick = CfgListClick
         OnDblClick = CfgListDblClick
         OnDrawItem = CfgListDrawItem
-        Style = lbOwnerDrawFixed
+        Style = lbOwnerDrawVariable
         TabOrder = 1
       end
       object FixFeaturesList: TListBox
@@ -1464,7 +1463,7 @@ object Form1: TForm1
       Caption = 'Beeper'
       ClientHeight = 381
       ClientWidth = 416
-      OnEnter = BeeperTabEnter
+      OnShow = BeeperTabShow
       object BeeperList: TCheckListBox
         Left = 8
         Height = 352
@@ -1510,7 +1509,7 @@ object Form1: TForm1
         OnClick = CfgListClick
         OnDblClick = CfgListDblClick
         OnDrawItem = CfgListDrawItem
-        Style = lbOwnerDrawFixed
+        Style = lbOwnerDrawVariable
         TabOrder = 1
       end
     end
@@ -1518,7 +1517,7 @@ object Form1: TForm1
       Caption = 'Serial'
       ClientHeight = 381
       ClientWidth = 416
-      OnEnter = SerialTabEnter
+      OnShow = SerialTabShow
       object SerialList: TListBox
         Left = 8
         Height = 352
@@ -1589,7 +1588,7 @@ object Form1: TForm1
         OnClick = CfgListClick
         OnDblClick = CfgListDblClick
         OnDrawItem = CfgListDrawItem
-        Style = lbOwnerDrawFixed
+        Style = lbOwnerDrawVariable
         TabOrder = 3
       end
       object Label25: TLabel
@@ -1676,8 +1675,8 @@ object Form1: TForm1
       end
       object LogClearButton: TButton
         Left = 312
-        Height = 25
-        Top = 353
+        Height = 30
+        Top = 352
         Width = 101
         Anchors = [akRight, akBottom]
         Caption = 'Clear'
@@ -1717,7 +1716,7 @@ object Form1: TForm1
       Left = 0
       Height = 23
       Top = 0
-      Width = 128
+      Width = 168
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
       OnClick = UartComboClick
@@ -1725,37 +1724,26 @@ object Form1: TForm1
       Text = 'No device'
     end
     object UartReadBtn: TButton
-      Left = 136
+      Left = 176
       Height = 30
       Hint = 'Read the active configuration from the FC'
       Top = 0
-      Width = 64
+      Width = 80
       Anchors = [akTop, akRight]
       Caption = 'Read'
       OnClick = UartReadBtnClick
       TabOrder = 1
     end
     object UartWriteBtn: TButton
-      Left = 208
+      Left = 264
       Height = 30
       Hint = 'Write the current configuration to the FC'
       Top = 0
-      Width = 64
+      Width = 80
       Anchors = [akTop, akRight]
-      Caption = 'Write'
+      Caption = 'Write...'
       OnClick = UartWriteBtnClick
       TabOrder = 2
-    end
-    object LoadDefaultBtn: TButton
-      Left = 280
-      Height = 30
-      Hint = 'Reset the FC configration to defaults and read it'
-      Top = 0
-      Width = 64
-      Anchors = [akTop, akRight]
-      Caption = 'Reset'
-      OnClick = LoadDefaultBtnClick
-      TabOrder = 3
     end
   end
   object CfgFileGroup: TGroupBox
@@ -1771,28 +1759,28 @@ object Form1: TForm1
       Left = 0
       Height = 23
       Top = 0
-      Width = 200
+      Width = 168
       Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 0
     end
     object FileReadBtn: TButton
-      Left = 208
+      Left = 176
       Height = 30
       Hint = 'Load the current configuration from a file'
       Top = 0
-      Width = 64
+      Width = 80
       Anchors = [akTop, akRight]
       Caption = 'Load'
       OnClick = FileReadBtnClick
       TabOrder = 1
     end
     object FileWriteBtn: TButton
-      Left = 280
+      Left = 264
       Height = 30
       Hint = 'Write the current configuration to a file'
       Top = 0
-      Width = 64
+      Width = 80
       Anchors = [akTop, akRight]
       Caption = 'Save'
       OnClick = FileWriteBtnClick
@@ -1833,6 +1821,10 @@ object Form1: TForm1
     object MenuWriteAll: TMenuItem
       Caption = 'Write All'
       OnClick = MenuWriteClick
+    end
+    object MenuReset: TMenuItem
+      Caption = 'Reset to Defaults'
+      OnClick = MenuResetClick
     end
   end
 end

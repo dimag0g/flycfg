@@ -64,7 +64,7 @@ begin
   end;
 
   Form1.DetailsTab.ActivePage := Form1.FeaturesTab;
-  Form1.FeaturesTab.OnEnter(nil);
+  Form1.FeaturesTab.OnShow(nil);
   Check(Form1.FeaturesList.Items.IndexOf('RX_SERIAL') >= 0, 'RX_SERIAL feature not found');
   Form1.FeaturesList.ItemIndex := Form1.FeaturesList.Items.IndexOf('RX_SERIAL');
   Form1.FeaturesList.OnSelectionChange(nil, True);
@@ -83,7 +83,7 @@ begin
    Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   end;
 
-  Form1.BeeperTab.OnEnter(nil);
+  Form1.BeeperTab.OnShow(nil);
   Check(Form1.BeeperList.Items.Count > 0, 'beeper alarms not loaded');
   Check(Form1.BeeperList.Items.IndexOf('RX_LOST') >= 0, 'RX_LOST alarm not found');
   Form1.BeeperList.ItemIndex := Form1.BeeperList.Items.IndexOf('RX_LOST');
@@ -103,7 +103,7 @@ begin
    Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   end;
 
-  Form1.SerialTab.OnEnter(nil);
+  Form1.SerialTab.OnShow(nil);
   Check(Form1.SerialList.Items.Count > 0, 'serial ports not loaded');
   Form1.SerialList.ItemIndex := Form1.SerialList.Items.IndexOf('1');
   Form1.SerialList.OnSelectionChange(nil, True);

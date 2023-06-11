@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   ExtCtrls, CheckLst, Menus, IniFiles, lazsynaser, LazSerial, Types,
-  Math, LCLType, LCLTranslator, Gettext;
+  Math, LCLType, LCLTranslator, Buttons, Gettext;
 
 type
 
@@ -73,13 +73,11 @@ type
     SaveDialog: TSaveDialog;
     UartWriteBtn: TButton;
     UartReadBtn: TButton;
-    LoadDefaultBtn: TButton;
     UartCombo: TComboBox;
     procedure BeeperListClickCheck(Sender: TObject);
     procedure BeeperListSelectionChange(Sender: TObject; User: boolean);
+    procedure BeeperTabShow(Sender: TObject);
     procedure CfgListClick(Sender: TObject);
-    procedure BeeperTabEnter(Sender: TObject);
-    procedure CurCfgListClick(Sender: TObject);
     procedure CurCfgListDblClick(Sender: TObject);
     procedure CurCfgListSelectionChange(Sender: TObject; User: boolean);
     procedure CurToDiffBtnClick(Sender: TObject);
@@ -88,7 +86,7 @@ type
     procedure FeaturesListSelectionChange(Sender: TObject; User: boolean);
     procedure CfgListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
-    procedure FeaturesTabEnter(Sender: TObject);
+    procedure FeaturesTabShow(Sender: TObject);
     procedure FileReadBtnClick(Sender: TObject);
     procedure FileWriteBtnClick(Sender: TObject);
     procedure FindButtonClick(Sender: TObject);
@@ -96,13 +94,13 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure LoadDefaultBtnClick(Sender: TObject);
     procedure LogClearButtonClick(Sender: TObject);
+    procedure MenuResetClick(Sender: TObject);
     procedure MenuWriteClick(Sender: TObject);
     procedure SerialBaudBoxChange(Sender: TObject);
     procedure SerialFnBoxChange(Sender: TObject);
     procedure SerialListSelectionChange(Sender: TObject; User: boolean);
-    procedure SerialTabEnter(Sender: TObject);
+    procedure SerialTabShow(Sender: TObject);
     procedure UartComboClick(Sender: TObject);
     procedure UartReadBtnClick(Sender: TObject);
     procedure CfgListDblClick(Sender: TObject);
@@ -193,6 +191,7 @@ end;
 procedure TForm1.FormResize(Sender: TObject);
 var
   ExtraWidth: Integer;
+  ListHeight: Integer;
 begin
   ExtraWidth := (Width - FormWidth) Div 2;
 
@@ -201,6 +200,13 @@ begin
   CurCfgGroup.Width := GroupWidth + ExtraWidth;
   FcPortGroup.Width := GroupWidth + ExtraWidth;
   CfgFileGroup.Width := GroupWidth + ExtraWidth;
+
+  // Fix DPI scaling of custom-drawn TListBoxes
+  ListHeight := Canvas.GetTextHeight('|');
+  CurCfgList.ItemHeight := ListHeight;
+  FeatureRcList.ItemHeight := ListHeight;
+  BeeperRcList.ItemHeight := ListHeight;
+  SerialRcList.ItemHeight := ListHeight;
 end;
 
 procedure TForm1.CurCfgShowLine(s: String);
@@ -210,6 +216,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     if CurCfgList.Items[i] = s then begin
        CurCfgList.ItemIndex := i;
+       CurCfgList.SelectRange(i, i, True);
        break;
     end;
   end;
@@ -366,7 +373,7 @@ begin
   DiffCfgList.Items := CurCfgList.Items;
 end;
 
-procedure TForm1.BeeperTabEnter(Sender: TObject);
+procedure TForm1.BeeperTabShow(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
@@ -409,13 +416,7 @@ begin
          BeeperRcList.Items.Add(s);
       end;
     end;
-
   end;
-end;
-
-procedure TForm1.CurCfgListClick(Sender: TObject);
-begin
-
 end;
 
 procedure TForm1.CfgListClick(Sender: TObject);
@@ -476,7 +477,7 @@ end;
 procedure TForm1.CurCfgListDblClick(Sender: TObject);
 begin
   if CurCfgList.ItemIndex < 0 then Exit;
-  CurCfgList.Items[CurCfgList.ItemIndex] := InputBox('Edit', 'Edit line', CurCfgList.Items[CurCfgList.ItemIndex]);
+  CurCfgList.Items[CurCfgList.ItemIndex] := InputBox('Edit', CurCfgList.Hint, CurCfgList.Items[CurCfgList.ItemIndex]);
   CfgLineSts[CurCfgList.ItemIndex] := CfgCalcSts(CurCfgList.ItemIndex);
 end;
 
@@ -520,7 +521,7 @@ begin
 
   s := ListBox.Items[localIndex];
   cfgIndex := CurCfgList.Items.IndexOf(s);
-  s := InputBox('Edit', 'Edit value:', s);
+  s := InputBox('Edit', 'Edit line:', s);
   CurCfgList.Items[cfgIndex] := s;
   CfgLineSts[cfgIndex] := CfgCalcSts(cfgIndex);
   ListBox.Items[localIndex] := s;
@@ -738,10 +739,10 @@ begin
   end;
 
   ListBox.Canvas.FillRect(ARect);
-  ListBox.Canvas.TextRect(ARect, ARect.Left+2, ARect.Top, ListBox.Items[Index]);
+  ListBox.Canvas.TextRect(ARect, ARect.Left, ARect.Top, ListBox.Items[Index]);
 end;
 
-procedure TForm1.FeaturesTabEnter(Sender: TObject);
+procedure TForm1.FeaturesTabShow(Sender: TObject);
 var
   s: String;
   fixFeatures: TStringArray;
@@ -806,7 +807,7 @@ begin
     end;
     ProgressBar.Position := 0;
 
-    FeaturesTabEnter(Sender);
+    FeaturesTabShow(Sender);
     StatusLabel.Caption := 'Loaded ' + FileNameEdit.Text;
   end;
 end;
@@ -879,7 +880,7 @@ begin
   GetRcByFeature(feature, FeatureRcList.Items);
 end;
 
-procedure TForm1.LoadDefaultBtnClick(Sender: TObject);
+procedure TForm1.MenuResetClick(Sender: TObject);
 begin
   if MessageDlg ('Confirm', 'Reset the FC config to default and load it?', mtConfirmation,
      [mbYes, mbNo],0) = mrYes
@@ -944,7 +945,7 @@ begin
   end;
 end;
 
-procedure TForm1.SerialTabEnter(Sender: TObject);
+procedure TForm1.SerialTabShow(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
