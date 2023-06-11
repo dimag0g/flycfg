@@ -1,0 +1,18 @@
+name: make
+on: [push]
+jobs:
+  Make:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Install dependencies
+        run: sudo apt-get -y update && sudo apt-get -y install lazarus devscripts gettext xvfb
+      - name: Build project
+        run: lazbuild -q --build-mode="Release" TLazSerial/LazSerialPort.lpk flycfg.lpi fpcunittest.lpi
+      - name: Run unit tests
+        run: xvfb-run ./fpcunittest
+      - name: Package project
+        run: cd release && bash debuild.sh

@@ -33,14 +33,6 @@
       <Item2 Name="Release">
         <CompilerOptions>
           <Version Value="11"/>
-          <PathDelim Value="\"/>
-          <Target>
-            <Filename Value="flycfg"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
             <Optimizations>

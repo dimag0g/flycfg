@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, fpcunit, testutils, testregistry, Forms, Controls,
-  IniFiles, LCLTranslator, Unit1;
+  IniFiles, LCLTranslator, LCLVersion, Unit1;
 
 type
 
@@ -176,16 +176,22 @@ procedure TTestCase1.TestCtrlSizesRu;
 var
   s: String;
 begin
+  {$IF LCL_FullVersion >= 2001000}
   SetDefaultLang('ru', '', 'flycfg');
   s := TestCtrlSizes;
   Check(s = '', s);
+  {$ELSE}
+  {$WARNING Translations cannot be unit-tested with this version of Lazarus}
+  {$ENDIF}
 end;
 
 procedure TTestCase1.TestCtrlSizesEn;
 var
   s: String;
 begin
+  {$IF LCL_FullVersion >= 2001000}
   SetDefaultLang('en', '', 'flycfg');
+  {$ENDIF}
   s := TestCtrlSizes;
   Check(s = '', s);
 end;

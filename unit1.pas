@@ -7,7 +7,17 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   ExtCtrls, CheckLst, Menus, IniFiles, lazsynaser, LazSerial, Types,
-  Math, LCLType, LCLTranslator, Buttons, Gettext;
+  Math, LCLType, LCLTranslator, LCLVersion, Buttons, Gettext;
+
+{$IF LCL_FullVersion < 2020000}
+{$IFOPT D+}
+{$WARNING Lazarus version too old}
+{$ELSE}
+{$FATAL Lazarus version not supported}
+{$ENDIF}
+{$ENDIF}
+
+{$WARN 5024 OFF}
 
 type
 
@@ -161,12 +171,10 @@ implementation
 { TForm1 }
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-{$PUSH}{$WARN 5024 OFF}
 begin
   Config.Destroy;
   Serial.Destroy;
 end;
-{$POP}
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
@@ -181,6 +189,8 @@ begin
 
   if (ParamCount = 2) and (ParamStr(1) = '--lang') then SetDefaultLang(ParamStr(2))
   else begin
+    langId := '';
+	fallbackLangId := '';
     GetLanguageIDs(langId, fallbackLangId);
     SetDefaultLang(fallbackLangId);
   end;
@@ -227,7 +237,9 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     if CurCfgList.Items[i] = s then begin
        CurCfgList.ItemIndex := i;
+	   {$IF LCL_FullVersion >= 2001000}
        CurCfgList.SelectRange(i, i, True);
+	   {$ENDIF}
        break;
     end;
   end;
@@ -628,7 +640,7 @@ begin
         fields[3] := IntToStr(ModeChannelCombo.ItemIndex);
         fields[4] := IntToStr(ModeBeginTrack.Position);
         fields[5] := IntToStr(ModeEndTrack.Position);
-        CurCfgList.Items[i] := String.Join(' ', fields);
+        CurCfgList.Items[i].Join(' ', fields);
         CfgLineSts[i] := CfgCalcSts(i);
         Break;
       end;
@@ -721,7 +733,7 @@ begin
           else if Pos('TELEMETRY', portFunction) = 1 then fields[5] := SerialBaudBox.Text
           else if Pos('BLACKBOX', portFunction) = 1 then fields[6] := SerialBaudBox.Text;
         end;
-        CurCfgList.Items[i] := String.Join(' ', fields);
+        CurCfgList.Items[i].Join(' ', fields);
         CfgLineSts[i] := CfgCalcSts(i);
       end;
     end;
