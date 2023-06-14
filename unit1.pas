@@ -164,6 +164,39 @@ const
 var
   Form1: TForm1;
 
+resourcestring
+  RcConnNoPort = 'No serial port selected!';
+  RcConnecting = 'Connecting to ';
+  RcConnFail = 'Failed to connect to ';
+  RcReadingDiff = 'Reading config diff';
+  RcReadDiffFail = 'Failed read diff config from FC on ';
+  RcReadingDump = 'Reading config dump';
+  RcReadDumpFail = 'Failed read config dump from FC on ';
+  RcReadingRes = 'Reading active resources';
+  RcReadResFail = 'Failed read active resources from FC on ';
+  RcReadingAuto = 'Reading autocomplete data';
+  RcReadAutoFail = 'Failed read autocomplete data from FC on ';
+  RcReadDone = 'Received active config from FC on ';
+  RcWriteEmpty = 'Nothing to write!';
+  RcWriting = 'Writing current config to FC';
+  RcWriteFailure = 'Failed to write ';
+  RcSaving = 'Saving FC config';
+  RcLoadCancel = 'Loading cancelled';
+  RcLoadNoFile = 'File not found: ';
+  RcLoadFail = 'Could not load ';
+  RcLoadDone = 'Config loaded from ';
+  RcSaveEmpty = 'Nothing to save!';
+  RcSaveCancel = 'Saving cancelled';
+  RcSaveFailure = 'Could not save ';
+  RcSaveDone = 'Config saved to ';
+  RcResetTitle = 'Confirm reset';
+  RcResetMessage = 'Reset the FC config to default and load it?';
+  RcResetting = 'Resetting to defaults';
+  RcCalculating = 'Calculating config status';
+
+
+
+
 implementation
 
 {$R *.lfm}
@@ -336,11 +369,11 @@ var
   attempt: Integer;
 begin
   if UartCombo.Text = '' then begin
-    StatusLabel.Caption := 'No serial port selected!';
+    StatusLabel.Caption := RcConnNoPort;
     Exit(False);
   end;
   s := '';
-  StatusLabel.Caption := 'Connecting to ' + UartCombo.Text; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcConnecting + UartCombo.Text; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for attempt := 1 to 10 do begin
     Serial.Connect(UartCombo.Text);
     if Serial.LastError <> 0 then begin
@@ -363,7 +396,7 @@ begin
     Serial.CloseSocket;
   end;
   if s <> '#' then begin;
-     StatusLabel.Caption := 'Failed to connect to ' + UartCombo.Text;
+     StatusLabel.Caption := RcConnFail + UartCombo.Text;
      Exit(False);
   end;
   Result := True;
@@ -547,7 +580,7 @@ var
   lowerLeft: TPoint;
 begin
   if CurCfgList.Items.Count = 0 then begin
-    StatusLabel.Caption := 'Nothing to write!';
+    StatusLabel.Caption := RcWriteEmpty;
     Exit;
   end;
 
@@ -571,7 +604,7 @@ begin
 
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Writing current config to FC'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcWriting; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for i := 0 to CurCfgList.Items.Count-1 do begin
     if mask = 0 then begin
        if not CurCfgList.Selected[i] then continue;
@@ -594,7 +627,7 @@ begin
       if Serial.LastError <> 0 then break;
     end;
     if s <> '# #' then begin;
-       StatusLabel.Caption := 'Failed to write: ' + cmd;
+       StatusLabel.Caption := RcWriteFailure + cmd;
        {$IFOPT D+}
        LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
        {$ENDIF}
@@ -607,7 +640,7 @@ begin
   end;
   ProgressBar.Position := 0;
 
-  StatusLabel.Caption := 'Saving FC config'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcSaving; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('save' + #10);
   Serial.CloseSocket; // This commands resets the FC, there is no response
   Sleep(1500);
@@ -860,20 +893,24 @@ var
 begin
   if Sender <> nil then
     if not OpenDialog.Execute then begin
-    StatusLabel.Caption := 'Loading aborted';
+    StatusLabel.Caption := RcLoadCancel;
     Exit;
     // Else: event triggered internally, don't display dialog
   end;
 
   if not fileExists(OpenDialog.Filename) then begin
-    StatusLabel.Caption := 'File not found: ' + OpenDialog.Filename;
+    StatusLabel.Caption := RcLoadNoFile + OpenDialog.Filename;
     Exit;
   end else begin
     FileNameEdit.Text := OpenDialog.FileName;
     CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
+    if CurCfgList.Items.Count = 0 then begin
+      StatusLabel.Caption := RcLoadFail + FileNameEdit.Text;
+      Exit;
+    end;
     if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
 
-    StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+    StatusLabel.Caption := RcCalculating; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
     //setLength(CfgLineSts, CurCfgList.Items.Count);
     for i := 0 to CurCfgList.Items.Count-1 do begin
       CfgLineSts[i] := CfgCalcSts(i);
@@ -883,7 +920,7 @@ begin
     ProgressBar.Position := 0;
 
     FeaturesTabShow(Sender);
-    StatusLabel.Caption := 'Loaded ' + FileNameEdit.Text;
+    StatusLabel.Caption := RcLoadDone + FileNameEdit.Text;
   end;
 end;
 
@@ -893,7 +930,7 @@ var
   fields: TStringArray;
 begin
   if CurCfgList.Items.Count < 1 then begin
-    StatusLabel.Caption := 'Nothing to save!';
+    StatusLabel.Caption := RcSaveEmpty;
     Exit;
   end;
 
@@ -914,14 +951,18 @@ begin
 
   if Sender <> nil then
     if not SaveDialog.Execute then begin
-    StatusLabel.Caption := 'Saving aborted';
+    StatusLabel.Caption := RcSaveCancel;
     Exit;
     // Else: event triggered internally, don't display dialog
   end;
 
   FileNameEdit.Text := SaveDialog.FileName;
-  CurCfgList.Items.SaveToFile(FileNameEdit.Text);
-  StatusLabel.Caption := 'Saved ' + FileNameEdit.Text;
+  try
+	CurCfgList.Items.SaveToFile(FileNameEdit.Text);
+	StatusLabel.Caption := RcSaveDone + FileNameEdit.Text;
+  except
+	on E: EStreamError do StatusLabel.Caption := RcSaveFailure + FileNameEdit.Text;
+  end;
 end;
 
 procedure TForm1.FindButtonClick(Sender: TObject);
@@ -957,12 +998,10 @@ end;
 
 procedure TForm1.MenuResetClick(Sender: TObject);
 begin
-  if MessageDlg ('Confirm', 'Reset the FC config to default and load it?', mtConfirmation,
-     [mbYes, mbNo],0) = mrYes
-  then begin
+  if MessageDlg (RcResetTitle, RcResetMessage, mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     if not UartConnect() then Exit;
 
-    StatusLabel.Caption := 'Resetting to defaults'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+    StatusLabel.Caption := RcResetting; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
     Serial.SendString('defaults' + #10);
     Serial.CloseSocket; // This commands resets the FC, there is no response
     Sleep(1500);
@@ -1088,7 +1127,7 @@ var
 begin
   if not UartConnect() then Exit;
 
-  StatusLabel.Caption := 'Reading config diff'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcReadingDiff; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('diff' + #10);
   Serial.SendString('#' + #10);
   DiffCfgList.Items.Clear;
@@ -1099,7 +1138,7 @@ begin
     DiffCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := 'Failed read diff config from FC on ' + UartCombo.Text;
+     StatusLabel.Caption := RcReadDiffFail + UartCombo.Text;
       {$IFOPT D+}
       LogList.Items.Add('diff recv: ' + s);
       LogList.Items.Add('diff err: ' + IntToStr(Serial.LastError));
@@ -1108,7 +1147,7 @@ begin
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading config dump'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcReadingDump; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('dump' + #10);
   Serial.SendString('#' + #10);
   CurCfgList.Items.Clear;
@@ -1119,7 +1158,7 @@ begin
     CurCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := 'Failed read config dump from FC on ' + UartCombo.Text;
+     StatusLabel.Caption := RcReadDumpFail + UartCombo.Text;
      {$IFOPT D+}
      LogList.Items.Add('dump recv: ' + s);
      LogList.Items.Add('dump err: ' + IntToStr(Serial.LastError));
@@ -1128,7 +1167,7 @@ begin
      Exit;
   end;
 
-  StatusLabel.Caption := 'Reading active resources'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcReadingRes; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('resource show' + #10);
   Serial.SendString('#' + #10);
   ActiveRcList.Items.Clear;
@@ -1139,7 +1178,7 @@ begin
     ActiveRcList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-    StatusLabel.Caption := 'Failed read active resources from FC on ' + UartCombo.Text;
+    StatusLabel.Caption := RcReadResFail + UartCombo.Text;
     {$IFOPT D+}
     LogList.Items.Add('rc recv: ' + s);
     LogList.Items.Add('rc err: ' + IntToStr(Serial.LastError));
@@ -1148,7 +1187,7 @@ begin
     Exit;
   end;
 
-  StatusLabel.Caption := 'Reading autocomplete data'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcReadingAuto; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   Serial.SendString('get' + #10);
   Serial.SendString('#' + #10);
   AutoComleteList.Items.Clear;
@@ -1159,7 +1198,7 @@ begin
     AutoComleteList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := 'Failed read autocomplete data from FC on ' + UartCombo.Text;
+     StatusLabel.Caption := RcReadAutoFail + UartCombo.Text;
      {$IFOPT D+}
      LogList.Items.Add('get recv: ' + s);
      LogList.Items.Add('get err: ' + IntToStr(Serial.LastError));
@@ -1170,7 +1209,7 @@ begin
 
   Serial.CloseSocket;
 
-  StatusLabel.Caption := 'Calculating config status'; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcCalculating; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   ActCfgList.Items := CurCfgList.Items;
   //setLength(CfgLineSts, CurCfgList.Items.Count);
   for i := 0 to CurCfgList.Items.Count-1 do begin
@@ -1180,7 +1219,7 @@ begin
   end;
   ProgressBar.Position := 0;
 
-  StatusLabel.Caption := 'Received active config from FC on ' + UartCombo.Text;
+  StatusLabel.Caption := RcReadDone + UartCombo.Text;
   DetailsTab.ActivePage := FeaturesTab;
   FeaturesTab.Repaint;
   CurCfgList.Repaint;

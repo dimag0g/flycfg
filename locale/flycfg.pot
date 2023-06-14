@@ -213,3 +213,115 @@ msgstr ""
 msgid "Write the current configuration to the FC"
 msgstr ""
 
+#: unit1.rccalculating
+msgid "Calculating config status"
+msgstr ""
+
+#: unit1.rcconnecting
+msgid "Connecting to "
+msgstr ""
+
+#: unit1.rcconnfail
+msgid "Failed to connect to "
+msgstr ""
+
+#: unit1.rcconnnoport
+msgid "No serial port selected!"
+msgstr ""
+
+#: unit1.rcloadcancel
+msgid "Loading cancelled"
+msgstr ""
+
+#: unit1.rcloaddone
+msgid "Config loaded from "
+msgstr ""
+
+#: unit1.rcloadfail
+msgid "Could not load "
+msgstr ""
+
+#: unit1.rcloadnofile
+msgid "File not found: "
+msgstr ""
+
+#: unit1.rcreadautofail
+msgid "Failed read autocomplete data from FC on "
+msgstr ""
+
+#: unit1.rcreaddifffail
+msgid "Failed read diff config from FC on "
+msgstr ""
+
+#: unit1.rcreaddone
+msgid "Received active config from FC on "
+msgstr ""
+
+#: unit1.rcreaddumpfail
+msgid "Failed read config dump from FC on "
+msgstr ""
+
+#: unit1.rcreadingauto
+msgid "Reading autocomplete data"
+msgstr ""
+
+#: unit1.rcreadingdiff
+msgid "Reading config diff"
+msgstr ""
+
+#: unit1.rcreadingdump
+msgid "Reading config dump"
+msgstr ""
+
+#: unit1.rcreadingres
+msgid "Reading active resources"
+msgstr ""
+
+#: unit1.rcreadresfail
+msgid "Failed read active resources from FC on "
+msgstr ""
+
+#: unit1.rcresetmessage
+msgid "Reset the FC config to default and load it?"
+msgstr ""
+
+#: unit1.rcresetting
+msgid "Resetting to defaults"
+msgstr ""
+
+#: unit1.rcresettitle
+msgid "Confirm reset"
+msgstr ""
+
+#: unit1.rcsavecancel
+msgid "Saving cancelled"
+msgstr ""
+
+#: unit1.rcsavedone
+msgid "Config saved to "
+msgstr ""
+
+#: unit1.rcsaveempty
+msgid "Nothing to save!"
+msgstr ""
+
+#: unit1.rcsavefailure
+msgid "Could not save "
+msgstr ""
+
+#: unit1.rcsaving
+msgid "Saving FC config"
+msgstr ""
+
+#: unit1.rcwriteempty
+msgid "Nothing to write!"
+msgstr ""
+
+#: unit1.rcwritefailure
+msgid "Failed to write "
+msgstr ""
+
+#: unit1.rcwriting
+msgid "Writing current config to FC"
+msgstr ""
+

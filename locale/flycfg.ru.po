@@ -10,8 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: tform1.beepertab.caption
 msgid "Beeper"
@@ -76,19 +75,19 @@ msgstr "Легенда:"
 
 #: tform1.label13.caption
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 #: tform1.label14.caption
 msgid "Inactive"
-msgstr ""
+msgstr "Inactive"
 
 #: tform1.label15.caption
 msgid "Custom"
-msgstr ""
+msgstr "Custom"
 
 #: tform1.label16.caption
 msgid "Invalid"
-msgstr ""
+msgstr "Invalid"
 
 #: tform1.label2.caption
 msgid "Feature resources/settings:"
@@ -96,7 +95,7 @@ msgstr "Ресурсы/параметры:"
 
 #: tform1.label21.caption
 msgid "Unsaved"
-msgstr ""
+msgstr "Unsaved"
 
 #: tform1.label23.caption
 msgid "Function:"
@@ -120,7 +119,7 @@ msgstr "Слот:"
 
 #: tform1.label4.caption
 msgid "Beeper alarms:"
-msgstr "Пищалка"
+msgstr "Cигналы тревоги:"
 
 #: tform1.label5.caption
 msgid "Beeper resources/settings:"
@@ -176,11 +175,11 @@ msgstr "Записать корректные"
 
 #: tform1.modechannelcombo.text
 msgid "Mode Channel"
-msgstr ""
+msgstr "Канал режима"
 
 #: tform1.modenamecombo.text
 msgid "Mode Name"
-msgstr ""
+msgstr "Название режима"
 
 #: tform1.modestab.caption
 msgid "Modes"
@@ -224,3 +223,115 @@ msgstr "Запись..."
 #: tform1.uartwritebtn.hint
 msgid "Write the current configuration to the FC"
 msgstr "Запись текущей конфигурации в файл"
+
+#: unit1.rccalculating
+msgid "Calculating config status"
+msgstr "Расчет состояния конфигурации"
+
+#: unit1.rcconnecting
+msgid "Connecting to "
+msgstr "Подключение к "
+
+#: unit1.rcconnfail
+msgid "Failed to connect to "
+msgstr "Не удалось подключиться к "
+
+#: unit1.rcconnnoport
+msgid "No serial port selected!"
+msgstr "Последовательный порт не выбран!"
+
+#: unit1.rcloadcancel
+msgid "Loading cancelled"
+msgstr "Загрузка отменена"
+
+#: unit1.rcloaddone
+msgid "Config loaded from "
+msgstr "Конфигурация загружена из "
+
+#: unit1.rcloadfail
+msgid "Could not load "
+msgstr "Не удалось прочитать "
+
+#: unit1.rcloadnofile
+msgid "File not found: "
+msgstr "Файл не найден: "
+
+#: unit1.rcreadautofail
+msgid "Failed read autocomplete data from FC on "
+msgstr "Не удалось считать данные автозаполнения КП на "
+
+#: unit1.rcreaddifffail
+msgid "Failed read diff config from FC on "
+msgstr "Не удалось прочитать разницу конфигураций КП на "
+
+#: unit1.rcreaddone
+msgid "Received active config from FC on "
+msgstr "Получена активная конфигурация КП на "
+
+#: unit1.rcreaddumpfail
+msgid "Failed read config dump from FC on "
+msgstr "Не удалось прочитать дамп конфигурации КП на "
+
+#: unit1.rcreadingauto
+msgid "Reading autocomplete data"
+msgstr "Чтение данных автозаполнения"
+
+#: unit1.rcreadingdiff
+msgid "Reading config diff"
+msgstr "Чтение различий в конфигурации"
+
+#: unit1.rcreadingdump
+msgid "Reading config dump"
+msgstr "Чтение дампа конфигурации"
+
+#: unit1.rcreadingres
+msgid "Reading active resources"
+msgstr "Чтение активных ресурсов"
+
+#: unit1.rcreadresfail
+msgid "Failed read active resources from FC on "
+msgstr "Не удалось считать активные ресурсы из КП на "
+
+#: unit1.rcresetmessage
+msgid "Reset the FC config to default and load it?"
+msgstr "Сбросить конфигурацию КП на значения по умолчанию и загрузить ее?"
+
+#: unit1.rcresetting
+msgid "Resetting to defaults"
+msgstr "Сброс на настройки по умолчанию"
+
+#: unit1.rcresettitle
+msgid "Confirm reset"
+msgstr "Подтвердите сброс"
+
+#: unit1.rcsavecancel
+msgid "Saving cancelled"
+msgstr "Сохранение отменено"
+
+#: unit1.rcsavedone
+msgid "Config saved to "
+msgstr "Конфигурация сохранена в "
+
+#: unit1.rcsaveempty
+msgid "Nothing to save!"
+msgstr "Нечего сохранять!"
+
+#: unit1.rcsavefailure
+msgid "Could not save "
+msgstr "Не удалось записать "
+
+#: unit1.rcsaving
+msgid "Saving FC config"
+msgstr "Сохранение конфигурации КП"
+
+#: unit1.rcwriteempty
+msgid "Nothing to write!"
+msgstr "Нечего писать!"
+
+#: unit1.rcwritefailure
+msgid "Failed to write "
+msgstr "Не удалось записать "
+
+#: unit1.rcwriting
+msgid "Writing current config to FC"
+msgstr "Запись текущей конфигурации в FC"
