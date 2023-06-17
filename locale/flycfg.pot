@@ -213,7 +213,8 @@ msgstr ""
 msgid "Write the current configuration to the FC"
 msgstr ""
 
-#: unit1.rccalculating
+#: unit1.rccalcstat
+msgctxt "unit1.rccalcstat"
 msgid "Calculating config status"
 msgstr ""
 
@@ -305,7 +306,8 @@ msgstr ""
 msgid "Nothing to save!"
 msgstr ""
 
-#: unit1.rcsavefailure
+#: unit1.rcsavefail
+msgctxt "unit1.rcsavefail"
 msgid "Could not save "
 msgstr ""
 
@@ -317,7 +319,8 @@ msgstr ""
 msgid "Nothing to write!"
 msgstr ""
 
-#: unit1.rcwritefailure
+#: unit1.rcwritefail
+msgctxt "unit1.rcwritefail"
 msgid "Failed to write "
 msgstr ""
 

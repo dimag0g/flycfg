@@ -1376,10 +1376,10 @@ object Form1: TForm1
     Height = 411
     Top = 5
     Width = 424
-    ActivePage = BeeperTab
+    ActivePage = ModesTab
     Anchors = [akTop, akLeft, akBottom]
     MultiLine = True
-    TabIndex = 1
+    TabIndex = 3
     TabOrder = 1
     Options = [nboMultiLine]
     object FeaturesTab: TTabSheet
@@ -1711,7 +1711,7 @@ object Form1: TForm1
         ParentColor = False
       end
       object Label9: TLabel
-        AnchorSideRight.Control = ModeBeginTrack
+        AnchorSideRight.Control = ModeChannelCombo
         AnchorSideRight.Side = asrBottom
         Left = 208
         Height = 15

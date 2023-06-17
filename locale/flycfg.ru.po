@@ -10,7 +10,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: tform1.beepertab.caption
 msgid "Beeper"
@@ -224,7 +225,8 @@ msgstr "Запись..."
 msgid "Write the current configuration to the FC"
 msgstr "Запись текущей конфигурации в файл"
 
-#: unit1.rccalculating
+#: unit1.rccalcstat
+msgctxt "unit1.rccalcstat"
 msgid "Calculating config status"
 msgstr "Расчет состояния конфигурации"
 
@@ -316,7 +318,8 @@ msgstr "Конфигурация сохранена в "
 msgid "Nothing to save!"
 msgstr "Нечего сохранять!"
 
-#: unit1.rcsavefailure
+#: unit1.rcsavefail
+msgctxt "unit1.rcsavefail"
 msgid "Could not save "
 msgstr "Не удалось записать "
 
@@ -328,7 +331,8 @@ msgstr "Сохранение конфигурации КП"
 msgid "Nothing to write!"
 msgstr "Нечего писать!"
 
-#: unit1.rcwritefailure
+#: unit1.rcwritefail
+msgctxt "unit1.rcwritefail"
 msgid "Failed to write "
 msgstr "Не удалось записать "
 

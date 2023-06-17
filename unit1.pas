@@ -179,7 +179,7 @@ resourcestring
   RcReadDone = 'Received active config from FC on ';
   RcWriteEmpty = 'Nothing to write!';
   RcWriting = 'Writing current config to FC';
-  RcWriteFailure = 'Failed to write ';
+  RcWriteFail = 'Failed to write ';
   RcSaving = 'Saving FC config';
   RcLoadCancel = 'Loading cancelled';
   RcLoadNoFile = 'File not found: ';
@@ -187,12 +187,12 @@ resourcestring
   RcLoadDone = 'Config loaded from ';
   RcSaveEmpty = 'Nothing to save!';
   RcSaveCancel = 'Saving cancelled';
-  RcSaveFailure = 'Could not save ';
+  RcSaveFail = 'Could not save ';
   RcSaveDone = 'Config saved to ';
   RcResetTitle = 'Confirm reset';
   RcResetMessage = 'Reset the FC config to default and load it?';
   RcResetting = 'Resetting to defaults';
-  RcCalculating = 'Calculating config status';
+  RcCalcStat = 'Calculating config status';
 
 
 
@@ -270,7 +270,7 @@ begin
   for i := CurCfgList.Items.Count-1 downto 0 do begin
     if CurCfgList.Items[i] = s then begin
        CurCfgList.ItemIndex := i;
-	   {$IF LCL_FullVersion >= 2001000}
+	   {$IF LCL_FullVersion > 2001000}
        CurCfgList.SelectRange(i, i, True);
 	   {$ENDIF}
        break;
@@ -627,7 +627,7 @@ begin
       if Serial.LastError <> 0 then break;
     end;
     if s <> '# #' then begin;
-       StatusLabel.Caption := RcWriteFailure + cmd;
+       StatusLabel.Caption := RcWriteFail + cmd;
        {$IFOPT D+}
        LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
        {$ENDIF}
@@ -903,14 +903,18 @@ begin
     Exit;
   end else begin
     FileNameEdit.Text := OpenDialog.FileName;
+    try
     CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
+    except
+      on E: EStreamError do StatusLabel.Caption := RcLoadFail + FileNameEdit.Text;
+    end;
     if CurCfgList.Items.Count = 0 then begin
       StatusLabel.Caption := RcLoadFail + FileNameEdit.Text;
       Exit;
     end;
     if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
 
-    StatusLabel.Caption := RcCalculating; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+    StatusLabel.Caption := RcCalcStat; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
     //setLength(CfgLineSts, CurCfgList.Items.Count);
     for i := 0 to CurCfgList.Items.Count-1 do begin
       CfgLineSts[i] := CfgCalcSts(i);
@@ -961,7 +965,7 @@ begin
 	CurCfgList.Items.SaveToFile(FileNameEdit.Text);
 	StatusLabel.Caption := RcSaveDone + FileNameEdit.Text;
   except
-	on E: EStreamError do StatusLabel.Caption := RcSaveFailure + FileNameEdit.Text;
+	on E: EStreamError do StatusLabel.Caption := RcSaveFail + FileNameEdit.Text;
   end;
 end;
 
@@ -1209,7 +1213,7 @@ begin
 
   Serial.CloseSocket;
 
-  StatusLabel.Caption := RcCalculating; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := RcCalcStat; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   ActCfgList.Items := CurCfgList.Items;
   //setLength(CfgLineSts, CurCfgList.Items.Count);
   for i := 0 to CurCfgList.Items.Count-1 do begin

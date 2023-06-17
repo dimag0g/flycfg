@@ -92,6 +92,7 @@ begin
    Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   end;
 
+  Form1.DetailsTab.ActivePage := Form1.BeeperTab;
   Form1.BeeperTab.OnShow(nil);
   Check(Form1.BeeperList.Items.Count > 0, 'beeper alarms not loaded');
   Check(Form1.BeeperList.Items.IndexOf('RX_LOST') >= 0, 'RX_LOST alarm not found');
@@ -112,6 +113,7 @@ begin
    Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   end;
 
+  Form1.DetailsTab.ActivePage := Form1.SerialTab;
   Form1.SerialTab.OnShow(nil);
   Check(Form1.SerialList.Items.Count > 0, 'serial ports not loaded');
   Form1.SerialList.ItemIndex := Form1.SerialList.Items.IndexOf('1');
@@ -136,6 +138,7 @@ begin
    Check(Form1.CurCfgList.Items.Count > 0, 'config lines not loaded');
   end;
 
+  Form1.DetailsTab.ActivePage := Form1.ModesTab;
   Form1.ModesTab.OnShow(nil);
   Check(Form1.ModesList.Items.Count > 0, 'modes not loaded');
   Form1.ModesList.ItemIndex := 0;
@@ -176,7 +179,7 @@ procedure TTestCase1.TestCtrlSizesRu;
 var
   s: String;
 begin
-  {$IF LCL_FullVersion >= 2001000}
+  {$IF LCL_FullVersion > 2001000}
   SetDefaultLang('ru', '', 'flycfg');
   s := TestCtrlSizes;
   Check(s = '', s);
@@ -189,7 +192,7 @@ procedure TTestCase1.TestCtrlSizesEn;
 var
   s: String;
 begin
-  {$IF LCL_FullVersion >= 2001000}
+  {$IF LCL_FullVersion > 2001000}
   SetDefaultLang('en', '', 'flycfg');
   {$ENDIF}
   s := TestCtrlSizes;
@@ -207,7 +210,7 @@ end;
 
 procedure TTestCase1.TearDown;
 begin
-  Form1.Hide;
+  //Form1.Hide;
 end;
 
 initialization
