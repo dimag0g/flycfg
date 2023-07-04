@@ -1,4 +1,4 @@
-unit Unit1;
+unit FlyCfgGui;
 
 {$mode objfpc}{$H+}
 
@@ -21,9 +21,9 @@ uses
 
 type
 
-  { TForm1 }
+  { TFlyCfgForm }
 
-  TForm1 = class(TForm)
+  TFlyCfgForm = class(TForm)
     ActCfgList: TListBox;
     ActiveRcList: TListBox;
     AutoComleteList: TListBox;
@@ -162,7 +162,7 @@ const
   CFG_MASK_RED      = $F000;
 
 var
-  Form1: TForm1;
+  MainForm: TFlyCfgForm;
 
 resourcestring
   RcConnNoPort = 'No serial port selected!';
@@ -201,15 +201,15 @@ implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ TFlyCfgForm }
 
-procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TFlyCfgForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   Config.Destroy;
   Serial.Destroy;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TFlyCfgForm.FormCreate(Sender: TObject);
 var
   langId, fallbackLangId: String;
 begin
@@ -242,7 +242,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TForm1.FormResize(Sender: TObject);
+procedure TFlyCfgForm.FormResize(Sender: TObject);
 var
   ExtraWidth: Integer;
   ListHeight: Integer;
@@ -263,7 +263,7 @@ begin
   SerialRcList.ItemHeight := ListHeight;
 end;
 
-procedure TForm1.CurCfgShowLine(s: String);
+procedure TFlyCfgForm.CurCfgShowLine(s: String);
 var
   i: Integer;
 begin
@@ -278,7 +278,7 @@ begin
   end;
 end;
 
-function TForm1.CfgCalcSts(index: Integer): Integer;
+function TFlyCfgForm.CfgCalcSts(index: Integer): Integer;
 var
   s: String;
   fields: TStringArray;
@@ -363,7 +363,7 @@ begin
   end;
 end;
 
-function TForm1.UartConnect(): Boolean;
+function TFlyCfgForm.UartConnect(): Boolean;
 var
   s: String;
   attempt: Integer;
@@ -402,7 +402,7 @@ begin
   Result := True;
 end;
 
-procedure TForm1.GetRcByFeature(feature: String; RcList: TStrings);
+procedure TFlyCfgForm.GetRcByFeature(feature: String; RcList: TStrings);
 var
   s: String;
   fields: TStringArray;
@@ -427,7 +427,7 @@ begin
   end;
 end;
 
-procedure TForm1.BeeperTabShow(Sender: TObject);
+procedure TFlyCfgForm.BeeperTabShow(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
@@ -472,7 +472,7 @@ begin
   end;
 end;
 
-procedure TForm1.CfgListClick(Sender: TObject);
+procedure TFlyCfgForm.CfgListClick(Sender: TObject);
 var
   ListBox: TListBox absolute Sender;
 begin
@@ -480,7 +480,7 @@ begin
   CurCfgShowLine(ListBox.Items[ListBox.ItemIndex]);
 end;
 
-procedure TForm1.BeeperListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.BeeperListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
   reason: String;
@@ -497,7 +497,7 @@ begin
   BeeperList.Hint := Config.ReadString('beeper_hints', BeeperList.Items[BeeperList.ItemIndex], '');
 end;
 
-procedure TForm1.BeeperListClickCheck(Sender: TObject);
+procedure TFlyCfgForm.BeeperListClickCheck(Sender: TObject);
 var
   s: String;
   reason: String;
@@ -527,14 +527,14 @@ begin
   end;
 end;
 
-procedure TForm1.CurCfgListDblClick(Sender: TObject);
+procedure TFlyCfgForm.CurCfgListDblClick(Sender: TObject);
 begin
   if CurCfgList.ItemIndex < 0 then Exit;
   CurCfgList.Items[CurCfgList.ItemIndex] := InputBox('Edit', CurCfgList.Hint, CurCfgList.Items[CurCfgList.ItemIndex]);
   CfgLineSts[CurCfgList.ItemIndex] := CfgCalcSts(CurCfgList.ItemIndex);
 end;
 
-procedure TForm1.CurCfgListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.CurCfgListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
   fields: TStringArray;
@@ -557,7 +557,7 @@ begin
   CurCfgList.Hint := s;
 end;
 
-procedure TForm1.CfgListDblClick(Sender: TObject);
+procedure TFlyCfgForm.CfgListDblClick(Sender: TObject);
 var
   ListBox: TListBox absolute Sender;
   s: String;
@@ -575,7 +575,7 @@ begin
   ListBox.Items[localIndex] := s;
 end;
 
-procedure TForm1.UartWriteBtnClick(Sender: TObject);
+procedure TFlyCfgForm.UartWriteBtnClick(Sender: TObject);
 var
   lowerLeft: TPoint;
 begin
@@ -589,7 +589,7 @@ begin
   WriteMenu.Popup(lowerLeft.X, lowerLeft.Y);
 end;
 
-procedure TForm1.MenuWriteClick(Sender: TObject);
+procedure TFlyCfgForm.MenuWriteClick(Sender: TObject);
 var
   s: String;
   i: Integer;
@@ -650,7 +650,7 @@ begin
 
 end;
 
-procedure TForm1.ModeChange(Sender: TObject);
+procedure TFlyCfgForm.ModeChange(Sender: TObject);
 var
   fields: TStringArray;
   s: String;
@@ -681,7 +681,7 @@ begin
   end;
 end;
 
-procedure TForm1.ModesListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.ModesListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
   i: Integer;
@@ -707,7 +707,7 @@ begin
   end;
 end;
 
-procedure TForm1.ModesTabShow(Sender: TObject);
+procedure TFlyCfgForm.ModesTabShow(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
@@ -736,7 +736,7 @@ begin
   ModeChannelCombo.ItemIndex := 0;
 end;
 
-procedure TForm1.SerialChange(Sender: TObject);
+procedure TFlyCfgForm.SerialChange(Sender: TObject);
 var
   s: String;
   i: Integer;
@@ -773,7 +773,7 @@ begin
   end;
 end;
 
-procedure TForm1.FeaturesListClickCheck(Sender: TObject);
+procedure TFlyCfgForm.FeaturesListClickCheck(Sender: TObject);
 var
   s: String;
   feature: String;
@@ -803,7 +803,7 @@ begin
   end;
 end;
 
-procedure TForm1.FeaturesListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.FeaturesListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
   feature: String;
@@ -822,7 +822,7 @@ begin
   GetRcByFeature(feature, FeatureRcList.Items);
 end;
 
-procedure TForm1.CfgListDrawItem(Control: TWinControl; Index: Integer;
+procedure TFlyCfgForm.CfgListDrawItem(Control: TWinControl; Index: Integer;
   ARect: TRect; State: TOwnerDrawState);
 var
   ListBox: TListBox absolute Control;
@@ -850,7 +850,7 @@ begin
   ListBox.Canvas.TextRect(ARect, ARect.Left, ARect.Top, ListBox.Items[Index]);
 end;
 
-procedure TForm1.FeaturesTabShow(Sender: TObject);
+procedure TFlyCfgForm.FeaturesTabShow(Sender: TObject);
 var
   s: String;
   fixFeatures: TStringArray;
@@ -887,7 +887,7 @@ begin
   end;
 end;
 
-procedure TForm1.FileReadBtnClick(Sender: TObject);
+procedure TFlyCfgForm.FileReadBtnClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -928,7 +928,7 @@ begin
   end;
 end;
 
-procedure TForm1.FileWriteBtnClick(Sender: TObject);
+procedure TFlyCfgForm.FileWriteBtnClick(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
@@ -969,7 +969,7 @@ begin
   end;
 end;
 
-procedure TForm1.FindButtonClick(Sender: TObject);
+procedure TFlyCfgForm.FindButtonClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -987,7 +987,7 @@ begin
   end;
 end;
 
-procedure TForm1.FixFeaturesListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.FixFeaturesListSelectionChange(Sender: TObject; User: boolean);
 var
   feature: String;
 begin
@@ -1000,7 +1000,7 @@ begin
   GetRcByFeature(feature, FeatureRcList.Items);
 end;
 
-procedure TForm1.MenuResetClick(Sender: TObject);
+procedure TFlyCfgForm.MenuResetClick(Sender: TObject);
 begin
   if MessageDlg (RcResetTitle, RcResetMessage, mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     if not UartConnect() then Exit;
@@ -1014,12 +1014,12 @@ begin
   end;
 end;
 
-procedure TForm1.LogClearButtonClick(Sender: TObject);
+procedure TFlyCfgForm.LogClearButtonClick(Sender: TObject);
 begin
   LogList.Items.Clear;
 end;
 
-procedure TForm1.SerialListSelectionChange(Sender: TObject; User: boolean);
+procedure TFlyCfgForm.SerialListSelectionChange(Sender: TObject; User: boolean);
 var
   s: String;
   i: Integer;
@@ -1063,7 +1063,7 @@ begin
   end;
 end;
 
-procedure TForm1.SerialTabShow(Sender: TObject);
+procedure TFlyCfgForm.SerialTabShow(Sender: TObject);
 var
   s: String;
   fields: TStringArray;
@@ -1096,7 +1096,7 @@ begin
   SerialBaudBox.ItemIndex := 4;
 end;
 
-procedure TForm1.UartComboClick(Sender: TObject);
+procedure TFlyCfgForm.UartComboClick(Sender: TObject);
 var
   s: String;
   ports: TStringArray;
@@ -1124,7 +1124,7 @@ begin
      (UartCombo.Items.IndexOf(UartCombo.Text) = -1) then UartCombo.Text := UartCombo.Items[0];
 end;
 
-procedure TForm1.UartReadBtnClick(Sender: TObject);
+procedure TFlyCfgForm.UartReadBtnClick(Sender: TObject);
 var
   s: String;
   i: Integer;

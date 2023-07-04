@@ -52,27 +52,22 @@
         <PackageName Value="FCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="3">
       <Unit0>
         <Filename Value="fpcunittest.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="testcases.pas"/>
+        <Filename Value="FlyCfgGui.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="unit1.lfm"/>
-        <IsPartOfProject Value="True"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="unit1.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="FlyCfgForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit1"/>
-      </Unit3>
+      </Unit1>
+      <Unit2>
+        <Filename Value="TestCasesGui.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

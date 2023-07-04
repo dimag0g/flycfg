@@ -3,7 +3,7 @@ program fpcunittest;
 {$mode objfpc}{$H+}
 
 uses
-  Interfaces, Forms, GuiTestRunner, Graphics, testcases, Unit1, LazSerialPort;
+  Interfaces, Forms, GuiTestRunner, Graphics, TestCasesGui, FlyCfgGui, LazSerialPort;
 
 {$R *.res}
 
@@ -14,7 +14,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TGuiTestRunner, TestRunner);
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFlyCfgForm, MainForm);
 
   {$IFDEF CMD_LINE}
   TestRunner.RunExecute(nil);

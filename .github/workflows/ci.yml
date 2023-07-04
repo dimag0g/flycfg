@@ -1,7 +1,13 @@
-name: make
-on: [push]
+name: smoke-test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
-  Make:
+  build-test-package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,4 +21,4 @@ jobs:
       - name: Run unit tests
         run: xvfb-run ./fpcunittest
       - name: Package project
-        run: cd release && bash debuild.sh
+        run: cd release && bash debian.sh

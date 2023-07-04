@@ -1,4 +1,4 @@
-object Form1: TForm1
+object FlyCfgForm: TFlyCfgForm
   Left = 387
   Height = 457
   Top = 162

@@ -1,330 +1,353 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-#: tform1.beepertab.caption
-msgid "Beeper"
-msgstr ""
-
-#: tform1.caption
-msgid "FlyCfg"
-msgstr ""
-
-#: tform1.cfgfilegroup.caption
-msgid "Configuration File"
-msgstr ""
-
-#: tform1.curcfggroup.caption
-msgctxt "tform1.curcfggroup.caption"
-msgid "Current config"
-msgstr ""
-
-#: tform1.debugtab.caption
-msgid "Debug"
-msgstr ""
-
-#: tform1.fcportgroup.caption
-msgid "Flight Controller"
-msgstr ""
-
-#: tform1.featurestab.caption
-msgid "Features"
-msgstr ""
-
-#: tform1.filereadbtn.caption
-msgid "Load"
-msgstr ""
-
-#: tform1.filereadbtn.hint
-msgid "Load the current configuration from a file"
-msgstr ""
-
-#: tform1.filewritebtn.caption
-msgid "Save"
-msgstr ""
-
-#: tform1.filewritebtn.hint
-msgid "Write the current configuration to a file"
-msgstr ""
-
-#: tform1.findbox.text
-msgid "<search>"
-msgstr ""
-
-#: tform1.findbutton.caption
-msgid "Find"
-msgstr ""
-
-#: tform1.label1.caption
-msgid "Selectable Features:"
-msgstr ""
-
-#: tform1.label12.caption
-msgid "Legend:"
-msgstr ""
-
-#: tform1.label13.caption
-msgid "Default"
-msgstr ""
-
-#: tform1.label14.caption
-msgid "Inactive"
-msgstr ""
-
-#: tform1.label15.caption
-msgid "Custom"
-msgstr ""
-
-#: tform1.label16.caption
-msgid "Invalid"
-msgstr ""
-
-#: tform1.label2.caption
-msgid "Feature resources/settings:"
-msgstr ""
-
-#: tform1.label21.caption
-msgid "Unsaved"
-msgstr ""
-
-#: tform1.label23.caption
-msgid "Function:"
-msgstr ""
-
-#: tform1.label24.caption
-msgid "Baudrate:"
-msgstr ""
-
-#: tform1.label25.caption
-msgid "Serial ports:"
-msgstr ""
-
-#: tform1.label26.caption
-msgid "Serial resources:"
-msgstr ""
-
-#: tform1.label3.caption
-msgid "Slot:"
-msgstr ""
-
-#: tform1.label4.caption
-msgid "Beeper alarms:"
-msgstr ""
-
-#: tform1.label5.caption
-msgid "Beeper resources/settings:"
-msgstr ""
-
-#: tform1.label6.caption
-msgid "Mode:"
-msgstr ""
-
-#: tform1.label7.caption
-msgid "Channel:"
-msgstr ""
-
-#: tform1.label8.caption
-msgid "Static Features:"
-msgstr ""
-
-#: tform1.label9.caption
-msgid "Range:"
-msgstr ""
-
-#: tform1.logclearbutton.caption
-msgid "Clear"
-msgstr ""
-
-#: tform1.logtab.caption
-msgid "Log"
-msgstr ""
-
-#: tform1.menureset.caption
-msgid "Reset to Defaults"
-msgstr ""
-
-#: tform1.menuwriteall.caption
-msgid "Write All"
-msgstr ""
-
-#: tform1.menuwritecustom.caption
-msgid "Write Custom"
-msgstr ""
-
-#: tform1.menuwriteline.caption
-msgid "Write Selected"
-msgstr ""
-
-#: tform1.menuwriteunsaved.caption
-msgid "Write Unsaved"
-msgstr ""
-
-#: tform1.menuwritevalid.caption
-msgid "Write Valid"
-msgstr ""
-
-#: tform1.modechannelcombo.text
-msgid "Mode Channel"
-msgstr ""
-
-#: tform1.modenamecombo.text
-msgid "Mode Name"
-msgstr ""
-
-#: tform1.modestab.caption
-msgid "Modes"
-msgstr ""
-
-#: tform1.serialbaudbox.text
-msgctxt "tform1.serialbaudbox.text"
-msgid "NONE"
-msgstr ""
-
-#: tform1.serialfnbox.text
-msgctxt "tform1.serialfnbox.text"
-msgid "NONE"
-msgstr ""
-
-#: tform1.serialtab.caption
-msgid "Serial"
-msgstr ""
-
-#: tform1.statuslabel.caption
-msgctxt "tform1.statuslabel.caption"
-msgid "Ready"
-msgstr ""
-
-#: tform1.uartcombo.text
-msgid "No device"
-msgstr ""
-
-#: tform1.uartreadbtn.caption
-msgid "Read"
-msgstr ""
-
-#: tform1.uartreadbtn.hint
-msgid "Read the active configuration from the FC"
-msgstr ""
-
-#: tform1.uartwritebtn.caption
-msgid "Write..."
-msgstr ""
-
-#: tform1.uartwritebtn.hint
-msgid "Write the current configuration to the FC"
-msgstr ""
-
-#: unit1.rccalcstat
-msgctxt "unit1.rccalcstat"
+#: flycfggui.rccalcstat
+msgctxt "flycfggui.rccalcstat"
 msgid "Calculating config status"
 msgstr ""
 
-#: unit1.rcconnecting
+#: flycfggui.rcconnecting
+msgctxt "flycfggui.rcconnecting"
 msgid "Connecting to "
 msgstr ""
 
-#: unit1.rcconnfail
+#: flycfggui.rcconnfail
+msgctxt "flycfggui.rcconnfail"
 msgid "Failed to connect to "
 msgstr ""
 
-#: unit1.rcconnnoport
+#: flycfggui.rcconnnoport
+msgctxt "flycfggui.rcconnnoport"
 msgid "No serial port selected!"
 msgstr ""
 
-#: unit1.rcloadcancel
+#: flycfggui.rcloadcancel
+msgctxt "flycfggui.rcloadcancel"
 msgid "Loading cancelled"
 msgstr ""
 
-#: unit1.rcloaddone
+#: flycfggui.rcloaddone
+msgctxt "flycfggui.rcloaddone"
 msgid "Config loaded from "
 msgstr ""
 
-#: unit1.rcloadfail
+#: flycfggui.rcloadfail
+msgctxt "flycfggui.rcloadfail"
 msgid "Could not load "
 msgstr ""
 
-#: unit1.rcloadnofile
+#: flycfggui.rcloadnofile
+msgctxt "flycfggui.rcloadnofile"
 msgid "File not found: "
 msgstr ""
 
-#: unit1.rcreadautofail
+#: flycfggui.rcreadautofail
+msgctxt "flycfggui.rcreadautofail"
 msgid "Failed read autocomplete data from FC on "
 msgstr ""
 
-#: unit1.rcreaddifffail
+#: flycfggui.rcreaddifffail
+msgctxt "flycfggui.rcreaddifffail"
 msgid "Failed read diff config from FC on "
 msgstr ""
 
-#: unit1.rcreaddone
+#: flycfggui.rcreaddone
+msgctxt "flycfggui.rcreaddone"
 msgid "Received active config from FC on "
 msgstr ""
 
-#: unit1.rcreaddumpfail
+#: flycfggui.rcreaddumpfail
+msgctxt "flycfggui.rcreaddumpfail"
 msgid "Failed read config dump from FC on "
 msgstr ""
 
-#: unit1.rcreadingauto
+#: flycfggui.rcreadingauto
+msgctxt "flycfggui.rcreadingauto"
 msgid "Reading autocomplete data"
 msgstr ""
 
-#: unit1.rcreadingdiff
+#: flycfggui.rcreadingdiff
+msgctxt "flycfggui.rcreadingdiff"
 msgid "Reading config diff"
 msgstr ""
 
-#: unit1.rcreadingdump
+#: flycfggui.rcreadingdump
+msgctxt "flycfggui.rcreadingdump"
 msgid "Reading config dump"
 msgstr ""
 
-#: unit1.rcreadingres
+#: flycfggui.rcreadingres
+msgctxt "flycfggui.rcreadingres"
 msgid "Reading active resources"
 msgstr ""
 
-#: unit1.rcreadresfail
+#: flycfggui.rcreadresfail
+msgctxt "flycfggui.rcreadresfail"
 msgid "Failed read active resources from FC on "
 msgstr ""
 
-#: unit1.rcresetmessage
+#: flycfggui.rcresetmessage
+msgctxt "flycfggui.rcresetmessage"
 msgid "Reset the FC config to default and load it?"
 msgstr ""
 
-#: unit1.rcresetting
+#: flycfggui.rcresetting
+msgctxt "flycfggui.rcresetting"
 msgid "Resetting to defaults"
 msgstr ""
 
-#: unit1.rcresettitle
+#: flycfggui.rcresettitle
+msgctxt "flycfggui.rcresettitle"
 msgid "Confirm reset"
 msgstr ""
 
-#: unit1.rcsavecancel
+#: flycfggui.rcsavecancel
+msgctxt "flycfggui.rcsavecancel"
 msgid "Saving cancelled"
 msgstr ""
 
-#: unit1.rcsavedone
+#: flycfggui.rcsavedone
+msgctxt "flycfggui.rcsavedone"
 msgid "Config saved to "
 msgstr ""
 
-#: unit1.rcsaveempty
+#: flycfggui.rcsaveempty
+msgctxt "flycfggui.rcsaveempty"
 msgid "Nothing to save!"
 msgstr ""
 
-#: unit1.rcsavefail
-msgctxt "unit1.rcsavefail"
+#: flycfggui.rcsavefail
+msgctxt "flycfggui.rcsavefail"
 msgid "Could not save "
 msgstr ""
 
-#: unit1.rcsaving
+#: flycfggui.rcsaving
+msgctxt "flycfggui.rcsaving"
 msgid "Saving FC config"
 msgstr ""
 
-#: unit1.rcwriteempty
+#: flycfggui.rcwriteempty
+msgctxt "flycfggui.rcwriteempty"
 msgid "Nothing to write!"
 msgstr ""
 
-#: unit1.rcwritefail
-msgctxt "unit1.rcwritefail"
+#: flycfggui.rcwritefail
+msgctxt "flycfggui.rcwritefail"
 msgid "Failed to write "
 msgstr ""
 
-#: unit1.rcwriting
+#: flycfggui.rcwriting
+msgctxt "flycfggui.rcwriting"
 msgid "Writing current config to FC"
+msgstr ""
+
+#: tflycfgform.beepertab.caption
+msgid "Beeper"
+msgstr ""
+
+#: tflycfgform.caption
+msgid "FlyCfg"
+msgstr ""
+
+#: tflycfgform.cfgfilegroup.caption
+msgid "Configuration File"
+msgstr ""
+
+#: tflycfgform.curcfggroup.caption
+msgid "Current config"
+msgstr ""
+
+#: tflycfgform.debugtab.caption
+msgid "Debug"
+msgstr ""
+
+#: tflycfgform.fcportgroup.caption
+msgid "Flight Controller"
+msgstr ""
+
+#: tflycfgform.featurestab.caption
+msgid "Features"
+msgstr ""
+
+#: tflycfgform.filereadbtn.caption
+msgid "Load"
+msgstr ""
+
+#: tflycfgform.filereadbtn.hint
+msgid "Load the current configuration from a file"
+msgstr ""
+
+#: tflycfgform.filewritebtn.caption
+msgid "Save"
+msgstr ""
+
+#: tflycfgform.filewritebtn.hint
+msgid "Write the current configuration to a file"
+msgstr ""
+
+#: tflycfgform.findbox.text
+msgid "<search>"
+msgstr ""
+
+#: tflycfgform.findbutton.caption
+msgid "Find"
+msgstr ""
+
+#: tflycfgform.label1.caption
+msgid "Selectable Features:"
+msgstr ""
+
+#: tflycfgform.label12.caption
+msgid "Legend:"
+msgstr ""
+
+#: tflycfgform.label13.caption
+msgid "Default"
+msgstr ""
+
+#: tflycfgform.label14.caption
+msgid "Inactive"
+msgstr ""
+
+#: tflycfgform.label15.caption
+msgid "Custom"
+msgstr ""
+
+#: tflycfgform.label16.caption
+msgid "Invalid"
+msgstr ""
+
+#: tflycfgform.label2.caption
+msgid "Feature resources/settings:"
+msgstr ""
+
+#: tflycfgform.label21.caption
+msgid "Unsaved"
+msgstr ""
+
+#: tflycfgform.label23.caption
+msgid "Function:"
+msgstr ""
+
+#: tflycfgform.label24.caption
+msgid "Baudrate:"
+msgstr ""
+
+#: tflycfgform.label25.caption
+msgid "Serial ports:"
+msgstr ""
+
+#: tflycfgform.label26.caption
+msgid "Serial resources:"
+msgstr ""
+
+#: tflycfgform.label3.caption
+msgid "Slot:"
+msgstr ""
+
+#: tflycfgform.label4.caption
+msgid "Beeper alarms:"
+msgstr ""
+
+#: tflycfgform.label5.caption
+msgid "Beeper resources/settings:"
+msgstr ""
+
+#: tflycfgform.label6.caption
+msgid "Mode:"
+msgstr ""
+
+#: tflycfgform.label7.caption
+msgid "Channel:"
+msgstr ""
+
+#: tflycfgform.label8.caption
+msgid "Static Features:"
+msgstr ""
+
+#: tflycfgform.label9.caption
+msgid "Range:"
+msgstr ""
+
+#: tflycfgform.logclearbutton.caption
+msgid "Clear"
+msgstr ""
+
+#: tflycfgform.logtab.caption
+msgid "Log"
+msgstr ""
+
+#: tflycfgform.menureset.caption
+msgid "Reset to Defaults"
+msgstr ""
+
+#: tflycfgform.menuwriteall.caption
+msgid "Write All"
+msgstr ""
+
+#: tflycfgform.menuwritecustom.caption
+msgid "Write Custom"
+msgstr ""
+
+#: tflycfgform.menuwriteline.caption
+msgid "Write Selected"
+msgstr ""
+
+#: tflycfgform.menuwriteunsaved.caption
+msgid "Write Unsaved"
+msgstr ""
+
+#: tflycfgform.menuwritevalid.caption
+msgid "Write Valid"
+msgstr ""
+
+#: tflycfgform.modechannelcombo.text
+msgid "Mode Channel"
+msgstr ""
+
+#: tflycfgform.modenamecombo.text
+msgid "Mode Name"
+msgstr ""
+
+#: tflycfgform.modestab.caption
+msgid "Modes"
+msgstr ""
+
+#: tflycfgform.serialbaudbox.text
+msgctxt "tflycfgform.serialbaudbox.text"
+msgid "NONE"
+msgstr ""
+
+#: tflycfgform.serialfnbox.text
+msgctxt "tflycfgform.serialfnbox.text"
+msgid "NONE"
+msgstr ""
+
+#: tflycfgform.serialtab.caption
+msgid "Serial"
+msgstr ""
+
+#: tflycfgform.statuslabel.caption
+msgid "Ready"
+msgstr ""
+
+#: tflycfgform.uartcombo.text
+msgid "No device"
+msgstr ""
+
+#: tflycfgform.uartreadbtn.caption
+msgid "Read"
+msgstr ""
+
+#: tflycfgform.uartreadbtn.hint
+msgid "Read the active configuration from the FC"
+msgstr ""
+
+#: tflycfgform.uartwritebtn.caption
+msgid "Write..."
+msgstr ""
+
+#: tflycfgform.uartwritebtn.hint
+msgid "Write the current configuration to the FC"
 msgstr ""
 
