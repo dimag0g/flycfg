@@ -22,6 +22,8 @@ type
     procedure TestSerialTab;
     procedure TestModesTab;
     procedure TestCtrlSizesRu;
+    procedure TestCtrlSizesFr;
+    procedure TestCtrlSizesDe;
     procedure TestCtrlSizesEn;
   end;
 
@@ -164,12 +166,14 @@ begin
         if not (Width >= w) then begin
           Result := Result + 'Width too small, caption: "' + Caption +
                              '", width: ' + IntToStr(Width) +
-                             ', pref: ' + IntToStr(w) + LineEnding;
+                             ', pref: ' + IntToStr(w) +
+                             ', name: ' + Name + LineEnding;
         end;
         if not (Height >= h) then begin
           Result := Result + 'Height too small, caption: "' + Caption +
                              '", height: ' + IntToStr(Height) +
-                             ', pref: ' + IntToStr(h) + LineEnding;
+                             ', pref: ' + IntToStr(h) +
+                             ', name: ' + Name + LineEnding;
         end;
       end;
   end;
@@ -181,6 +185,32 @@ var
 begin
   {$IF LCL_FullVersion > 2001000}
   SetDefaultLang('ru', '', 'flycfg');
+  s := TestCtrlSizes;
+  Check(s = '', s);
+  {$ELSE}
+  {$WARNING Translations cannot be unit-tested with this version of Lazarus}
+  {$ENDIF}
+end;
+
+procedure TTestCase1.TestCtrlSizesFr;
+var
+  s: String;
+begin
+  {$IF LCL_FullVersion > 2001000}
+  SetDefaultLang('fr', '', 'flycfg');
+  s := TestCtrlSizes;
+  Check(s = '', s);
+  {$ELSE}
+  {$WARNING Translations cannot be unit-tested with this version of Lazarus}
+  {$ENDIF}
+end;
+
+procedure TTestCase1.TestCtrlSizesDe;
+var
+  s: String;
+begin
+  {$IF LCL_FullVersion > 2001000}
+  SetDefaultLang('de', '', 'flycfg');
   s := TestCtrlSizes;
   Check(s = '', s);
   {$ELSE}

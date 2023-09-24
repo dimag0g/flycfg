@@ -10,8 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: flycfggui.rccalcstat
 msgctxt "flycfggui.rccalcstat"
@@ -19,161 +18,149 @@ msgid "Calculating config status"
 msgstr "Расчет состояния конфигурации"
 
 #: flycfggui.rcconnecting
-#| msgid "Connecting to "
+#, object-pascal-format
 msgctxt "flycfggui.rcconnecting"
-msgid "Connecting to "
-msgstr "Подключение к "
+msgid "Connecting to %s"
+msgstr "Подключение к %s"
 
 #: flycfggui.rcconnfail
-#| msgid "Failed to connect to "
+#, object-pascal-format
 msgctxt "flycfggui.rcconnfail"
-msgid "Failed to connect to "
-msgstr "Не удалось подключиться к "
+msgid "Failed to connect to %s"
+msgstr "Не удалось подключиться к %s"
 
 #: flycfggui.rcconnnoport
-#| msgid "No serial port selected!"
 msgctxt "flycfggui.rcconnnoport"
 msgid "No serial port selected!"
 msgstr "Последовательный порт не выбран!"
 
 #: flycfggui.rcloadcancel
-#| msgid "Loading cancelled"
 msgctxt "flycfggui.rcloadcancel"
 msgid "Loading cancelled"
 msgstr "Загрузка отменена"
 
 #: flycfggui.rcloaddone
-#| msgid "Config loaded from "
+#, object-pascal-format
 msgctxt "flycfggui.rcloaddone"
-msgid "Config loaded from "
-msgstr "Конфигурация загружена из "
+msgid "Config loaded from %s"
+msgstr "Конфигурация загружена из %s"
 
 #: flycfggui.rcloadfail
-#| msgid "Could not load "
+#, object-pascal-format
 msgctxt "flycfggui.rcloadfail"
-msgid "Could not load "
-msgstr "Не удалось прочитать "
+msgid "Could not load %s"
+msgstr "Не удалось прочитать %s"
 
 #: flycfggui.rcloadnofile
-#| msgid "File not found: "
+#, object-pascal-format
 msgctxt "flycfggui.rcloadnofile"
-msgid "File not found: "
-msgstr "Файл не найден: "
+msgid "File not found: %s"
+msgstr "Файл не найден: %s"
 
 #: flycfggui.rcreadautofail
-#| msgid "Failed read autocomplete data from FC on "
+#, object-pascal-format
 msgctxt "flycfggui.rcreadautofail"
-msgid "Failed read autocomplete data from FC on "
-msgstr "Не удалось считать данные автозаполнения КП на "
+msgid "Failed read autocomplete data from FC on %s"
+msgstr "Не удалось прочитать данные автозаполнения КП из %s"
 
 #: flycfggui.rcreaddifffail
-#| msgid "Failed read diff config from FC on "
+#, object-pascal-format
 msgctxt "flycfggui.rcreaddifffail"
-msgid "Failed read diff config from FC on "
-msgstr "Не удалось прочитать разницу конфигураций КП на "
+msgid "Failed read diff config from FC on %s"
+msgstr "Не удалось прочитать разницу конфигураций КП из %s"
 
 #: flycfggui.rcreaddone
-#| msgid "Received active config from FC on "
+#, object-pascal-format
 msgctxt "flycfggui.rcreaddone"
-msgid "Received active config from FC on "
-msgstr "Получена активная конфигурация КП на "
+msgid "Received active config from FC on %s"
+msgstr "Получена активная конфигурация КП из %s"
 
 #: flycfggui.rcreaddumpfail
-#| msgid "Failed read config dump from FC on "
+#, object-pascal-format
 msgctxt "flycfggui.rcreaddumpfail"
-msgid "Failed read config dump from FC on "
-msgstr "Не удалось прочитать дамп конфигурации КП на "
+msgid "Failed read config dump from FC on %s"
+msgstr "Не удалось прочитать дамп конфигурации КП из %s"
 
 #: flycfggui.rcreadingauto
-#| msgid "Reading autocomplete data"
 msgctxt "flycfggui.rcreadingauto"
 msgid "Reading autocomplete data"
 msgstr "Чтение данных автозаполнения"
 
 #: flycfggui.rcreadingdiff
-#| msgid "Reading config diff"
 msgctxt "flycfggui.rcreadingdiff"
 msgid "Reading config diff"
 msgstr "Чтение различий в конфигурации"
 
 #: flycfggui.rcreadingdump
-#| msgid "Reading config dump"
 msgctxt "flycfggui.rcreadingdump"
 msgid "Reading config dump"
 msgstr "Чтение дампа конфигурации"
 
 #: flycfggui.rcreadingres
-#| msgid "Reading active resources"
 msgctxt "flycfggui.rcreadingres"
 msgid "Reading active resources"
 msgstr "Чтение активных ресурсов"
 
 #: flycfggui.rcreadresfail
-#| msgid "Failed read active resources from FC on "
+#, object-pascal-format
 msgctxt "flycfggui.rcreadresfail"
-msgid "Failed read active resources from FC on "
-msgstr "Не удалось считать активные ресурсы из КП на "
+msgid "Failed read active resources from FC on %s"
+msgstr "Не удалось считать активные ресурсы из КП из %s"
 
 #: flycfggui.rcresetmessage
-#| msgid "Reset the FC config to default and load it?"
 msgctxt "flycfggui.rcresetmessage"
 msgid "Reset the FC config to default and load it?"
 msgstr "Сбросить конфигурацию КП на значения по умолчанию и загрузить ее?"
 
 #: flycfggui.rcresetting
-#| msgid "Resetting to defaults"
 msgctxt "flycfggui.rcresetting"
 msgid "Resetting to defaults"
 msgstr "Сброс на настройки по умолчанию"
 
 #: flycfggui.rcresettitle
-#| msgid "Confirm reset"
 msgctxt "flycfggui.rcresettitle"
 msgid "Confirm reset"
 msgstr "Подтвердите сброс"
 
 #: flycfggui.rcsavecancel
-#| msgid "Saving cancelled"
 msgctxt "flycfggui.rcsavecancel"
 msgid "Saving cancelled"
 msgstr "Сохранение отменено"
 
 #: flycfggui.rcsavedone
-#| msgid "Config saved to "
+#, object-pascal-format
 msgctxt "flycfggui.rcsavedone"
-msgid "Config saved to "
-msgstr "Конфигурация сохранена в "
+msgid "Config saved to %s"
+msgstr "Конфигурация сохранена в %s"
 
 #: flycfggui.rcsaveempty
-#| msgid "Nothing to save!"
 msgctxt "flycfggui.rcsaveempty"
 msgid "Nothing to save!"
 msgstr "Нечего сохранять!"
 
 #: flycfggui.rcsavefail
+#, object-pascal-format
 msgctxt "flycfggui.rcsavefail"
-msgid "Could not save "
-msgstr "Не удалось записать "
+msgid "Could not save %s"
+msgstr "Не удалось записать %s"
 
 #: flycfggui.rcsaving
-#| msgid "Saving FC config"
 msgctxt "flycfggui.rcsaving"
 msgid "Saving FC config"
 msgstr "Сохранение конфигурации КП"
 
 #: flycfggui.rcwriteempty
-#| msgid "Nothing to write!"
 msgctxt "flycfggui.rcwriteempty"
 msgid "Nothing to write!"
 msgstr "Нечего писать!"
 
 #: flycfggui.rcwritefail
+#, object-pascal-format
 msgctxt "flycfggui.rcwritefail"
-msgid "Failed to write "
-msgstr "Не удалось записать "
+msgid "Failed to write %s"
+msgstr "Не удалось записать %s"
 
 #: flycfggui.rcwriting
-#| msgid "Writing current config to FC"
 msgctxt "flycfggui.rcwriting"
 msgid "Writing current config to FC"
 msgstr "Запись текущей конфигурации в FC"
@@ -191,8 +178,6 @@ msgid "Configuration File"
 msgstr "Файл конфигурации"
 
 #: tflycfgform.curcfggroup.caption
-#| msgctxt "tflycfgform.curcfggroup.caption"
-#| msgid "Current config"
 msgid "Current config"
 msgstr "Текущая конфигурация"
 
@@ -367,8 +352,6 @@ msgid "Serial"
 msgstr "Порт"
 
 #: tflycfgform.statuslabel.caption
-#| msgctxt "tflycfgform.statuslabel.caption"
-#| msgid "Ready"
 msgid "Ready"
 msgstr "Готов"
 

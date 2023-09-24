@@ -166,29 +166,29 @@ var
 
 resourcestring
   RcConnNoPort = 'No serial port selected!';
-  RcConnecting = 'Connecting to ';
-  RcConnFail = 'Failed to connect to ';
+  RcConnecting = 'Connecting to %s';
+  RcConnFail = 'Failed to connect to %s';
   RcReadingDiff = 'Reading config diff';
-  RcReadDiffFail = 'Failed read diff config from FC on ';
+  RcReadDiffFail = 'Failed read diff config from FC on %s';
   RcReadingDump = 'Reading config dump';
-  RcReadDumpFail = 'Failed read config dump from FC on ';
+  RcReadDumpFail = 'Failed read config dump from FC on %s';
   RcReadingRes = 'Reading active resources';
-  RcReadResFail = 'Failed read active resources from FC on ';
+  RcReadResFail = 'Failed read active resources from FC on %s';
   RcReadingAuto = 'Reading autocomplete data';
-  RcReadAutoFail = 'Failed read autocomplete data from FC on ';
-  RcReadDone = 'Received active config from FC on ';
+  RcReadAutoFail = 'Failed read autocomplete data from FC on %s';
+  RcReadDone = 'Received active config from FC on %s';
   RcWriteEmpty = 'Nothing to write!';
   RcWriting = 'Writing current config to FC';
-  RcWriteFail = 'Failed to write ';
+  RcWriteFail = 'Failed to write %s';
   RcSaving = 'Saving FC config';
   RcLoadCancel = 'Loading cancelled';
-  RcLoadNoFile = 'File not found: ';
-  RcLoadFail = 'Could not load ';
-  RcLoadDone = 'Config loaded from ';
+  RcLoadNoFile = 'File not found: %s';
+  RcLoadFail = 'Could not load %s';
+  RcLoadDone = 'Config loaded from %s';
   RcSaveEmpty = 'Nothing to save!';
   RcSaveCancel = 'Saving cancelled';
-  RcSaveFail = 'Could not save ';
-  RcSaveDone = 'Config saved to ';
+  RcSaveFail = 'Could not save %s';
+  RcSaveDone = 'Config saved to %s';
   RcResetTitle = 'Confirm reset';
   RcResetMessage = 'Reset the FC config to default and load it?';
   RcResetting = 'Resetting to defaults';
@@ -373,7 +373,7 @@ begin
     Exit(False);
   end;
   s := '';
-  StatusLabel.Caption := RcConnecting + UartCombo.Text; StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
+  StatusLabel.Caption := StringReplace(RcConnecting, '%s', UartCombo.Text, []); StatusLabel.Repaint; {$IFDEF UNIX} Application.ProcessMessages; {$ENDIF}
   for attempt := 1 to 10 do begin
     Serial.Connect(UartCombo.Text);
     if Serial.LastError <> 0 then begin
@@ -396,7 +396,7 @@ begin
     Serial.CloseSocket;
   end;
   if s <> '#' then begin;
-     StatusLabel.Caption := RcConnFail + UartCombo.Text;
+     StatusLabel.Caption := StringReplace(RcConnFail, '%s', UartCombo.Text, []);
      Exit(False);
   end;
   Result := True;
@@ -627,7 +627,7 @@ begin
       if Serial.LastError <> 0 then break;
     end;
     if s <> '# #' then begin;
-       StatusLabel.Caption := RcWriteFail + cmd;
+       StatusLabel.Caption := StringReplace(RcWriteFail, '%s', cmd, []);
        {$IFOPT D+}
        LogList.Items.Add('wr err: ' + IntToStr(Serial.LastError));
        {$ENDIF}
@@ -899,17 +899,17 @@ begin
   end;
 
   if not fileExists(OpenDialog.Filename) then begin
-    StatusLabel.Caption := RcLoadNoFile + OpenDialog.Filename;
+    StatusLabel.Caption := StringReplace(RcLoadNoFile, '%s', OpenDialog.Filename, []);
     Exit;
   end else begin
     FileNameEdit.Text := OpenDialog.FileName;
     try
     CurCfgList.Items.LoadFromFile(FileNameEdit.Text);
     except
-      on E: EStreamError do StatusLabel.Caption := RcLoadFail + FileNameEdit.Text;
+      on E: EStreamError do StatusLabel.Caption := StringReplace(RcLoadFail, '%s', FileNameEdit.Text, []);
     end;
     if CurCfgList.Items.Count = 0 then begin
-      StatusLabel.Caption := RcLoadFail + FileNameEdit.Text;
+      StatusLabel.Caption := StringReplace(RcLoadFail, '%s', FileNameEdit.Text, []);
       Exit;
     end;
     if ActCfgList.Items.Count = 0 then ActCfgList.Items := CurCfgList.Items;
@@ -924,7 +924,7 @@ begin
     ProgressBar.Position := 0;
 
     FeaturesTabShow(Sender);
-    StatusLabel.Caption := RcLoadDone + FileNameEdit.Text;
+    StatusLabel.Caption := StringReplace(RcLoadDone, '%s', FileNameEdit.Text, []);
   end;
 end;
 
@@ -963,9 +963,9 @@ begin
   FileNameEdit.Text := SaveDialog.FileName;
   try
 	CurCfgList.Items.SaveToFile(FileNameEdit.Text);
-	StatusLabel.Caption := RcSaveDone + FileNameEdit.Text;
+	StatusLabel.Caption := StringReplace(RcSaveDone, '%s', FileNameEdit.Text, []);
   except
-	on E: EStreamError do StatusLabel.Caption := RcSaveFail + FileNameEdit.Text;
+	on E: EStreamError do StatusLabel.Caption := StringReplace(RcSaveFail, '%s', FileNameEdit.Text, []);
   end;
 end;
 
@@ -1142,7 +1142,7 @@ begin
     DiffCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := RcReadDiffFail + UartCombo.Text;
+     StatusLabel.Caption := StringReplace(RcReadDiffFail, '%s', UartCombo.Text, []);
       {$IFOPT D+}
       LogList.Items.Add('diff recv: ' + s);
       LogList.Items.Add('diff err: ' + IntToStr(Serial.LastError));
@@ -1162,7 +1162,7 @@ begin
     CurCfgList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := RcReadDumpFail + UartCombo.Text;
+     StatusLabel.Caption := StringReplace(RcReadDumpFail, '%s', UartCombo.Text, []);
      {$IFOPT D+}
      LogList.Items.Add('dump recv: ' + s);
      LogList.Items.Add('dump err: ' + IntToStr(Serial.LastError));
@@ -1182,7 +1182,7 @@ begin
     ActiveRcList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-    StatusLabel.Caption := RcReadResFail + UartCombo.Text;
+    StatusLabel.Caption := StringReplace(RcReadResFail, '%s', UartCombo.Text, []);
     {$IFOPT D+}
     LogList.Items.Add('rc recv: ' + s);
     LogList.Items.Add('rc err: ' + IntToStr(Serial.LastError));
@@ -1202,7 +1202,7 @@ begin
     AutoComleteList.Items.Add(s);
   end;
   if s <> '# #' then begin;
-     StatusLabel.Caption := RcReadAutoFail + UartCombo.Text;
+     StatusLabel.Caption := StringReplace(RcReadAutoFail, '%s', UartCombo.Text, []);
      {$IFOPT D+}
      LogList.Items.Add('get recv: ' + s);
      LogList.Items.Add('get err: ' + IntToStr(Serial.LastError));
@@ -1223,7 +1223,7 @@ begin
   end;
   ProgressBar.Position := 0;
 
-  StatusLabel.Caption := RcReadDone + UartCombo.Text;
+  StatusLabel.Caption := StringReplace(RcReadDone, '%s', UartCombo.Text, []);
   DetailsTab.ActivePage := FeaturesTab;
   FeaturesTab.Repaint;
   CurCfgList.Repaint;
