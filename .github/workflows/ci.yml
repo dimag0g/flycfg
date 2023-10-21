@@ -22,3 +22,7 @@ jobs:
         run: xvfb-run ./fpcunittest
       - name: Package project
         run: cd release && bash debian.sh
+      - uses: actions/upload-artifact@v3.1.3
+        with:
+          path: release/flycfg*.deb
+          retention-days: 1

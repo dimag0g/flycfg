@@ -1,6 +1,8 @@
 *.res
+*.rsj
 *.lps
 *.lrs
+*.lrj
 *.exe
 *.dll
 *.dbg
@@ -12,9 +14,12 @@
 *.xz
 *.deb
 *.mo
+*.o
+*.or
+*.ppu
+*.compiled
 lib/
 backup/
-*.compiled
 
 # Project-specific files
 flycfg

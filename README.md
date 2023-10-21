@@ -45,4 +45,4 @@ Licenses
 
 The software itself is licensed under GPL v.3, see LICENSE. The source code is available at https://github.com/dimag0g/flycfg
 
-The bee icon is free for non-commerical use with attribution, see: https://www.vecteezy.com/vector-art/596994-bee-logo-and-symbol-vector-templates
+The bee icon by [Mar Sono](https://www.vecteezy.com/members/marsono) is free for non-commerical use with attribution, see: https://www.vecteezy.com/vector-art/596994-bee-logo-and-symbol-vector-templates

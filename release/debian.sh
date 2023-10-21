@@ -40,3 +40,7 @@ if [[ -n "$WSL_DISTRO_NAME" ]]; then
 else
     debuild -us -uc -b -d
 fi
+
+cd ../..
+cp DEBUILD/flycfg*.deb ./
+rm -fr DEBUILD
